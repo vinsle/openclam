@@ -1,0 +1,43 @@
+<project name="openclam" default="all">
+
+  <property environment="env"/>
+  <import file="${env.PONEY_HOME}/poney.xml"/>
+
+  <target name="clean" description="clean intermediate build artifacts">
+    <delete dir="${out.dir}"/>
+  </target>
+
+  <target name="configure" description="update external libraries">
+    <update name="boost"/>
+    <update name="opencl"/>    
+  </target>
+
+  <target name="test" description="run unit tests">
+    <build-test name="openclam" mode="all" depends="boost" libs="OpenCL">
+      <compilerarg value="-Wno-uninitialized" location="mid" if="is-cygwin"/>
+    </build-test>
+  </target>
+
+  <target name="export" description="export distribution">
+    <deploy>
+      <module name="openclam">
+        <include name="**/*.hpp"/>
+      </module>
+    </deploy>
+  </target>
+
+  <target name="package" depends="export" description="package distribution">
+    <mkdir dir="${dist.dir}"/>
+    <zip destfile="${dist.dir}/${ant.project.name}.zip">
+      <fileset dir="${dist.dir}" includes="include/**"/>
+      <fileset dir="${root.dir}" includes="*.txt"/>
+    </zip>
+    <tar destfile="${dist.dir}/${ant.project.name}.tar.bz2" compression="bzip2">
+      <fileset dir="${dist.dir}" includes="include/**"/>
+      <fileset dir="${root.dir}" includes="*.txt"/>
+    </tar>
+  </target>
+
+  <target name="all" depends="configure,test,export,package" description="configure, build and run tests, export and package distribution"/>
+
+</project>
