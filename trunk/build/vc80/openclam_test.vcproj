@@ -192,6 +192,10 @@
 				RelativePath="..\..\src\tests\openclam_test\OpenClamTest.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\src\tests\openclam_test\Test.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

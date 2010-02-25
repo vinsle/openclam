@@ -1,51 +1,15 @@
-// *****************************************************************************
 //
-// This file is part of a MASA library or program.
-// Refer to the included end-user license agreement for restrictions.
+//  Copyright Silvin Lubecki 2010
 //
-// Copyright (c) 2010 Mathématiques Appliquées SA (MASA)
+//  Distributed under the Boost Software License, Version 1.0. (See
+//  accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
 //
-// *****************************************************************************
 
-#define __CL_ENABLE_EXCEPTIONS
-#pragma warning( push )
-#pragma warning( disable: 4100 4245 4290 4510 4512 4610 )
-#include <CL/cl.hpp>
+#include "Test.h"
 #include "openclam/cl.hpp"
 #include <math.h>
-#pragma warning( pop )
-#include <boost/test/auto_unit_test.hpp>
-#define BOOST_LIB_NAME boost_unit_test_framework
-#include <boost/config/auto_link.hpp>
-
-namespace
-{
-    std::string data_directory;
-
-    void set_data_directory( int argc, char* argv[] )
-    {
-        while( argc-- )
-        {
-            const std::string argument = argv[argc];
-            const std::string::size_type n = argument.find( '=' );
-            if( n != std::string::npos && argument.substr( 0, n ) == "--data_directory" )
-                data_directory = argument.substr( n+1 );
-        }
-    }
-}
-
-::boost::unit_test::test_suite* init_unit_test_suite( int argc, char* argv[] )
-{
-    set_data_directory( argc, argv );
-    return 0;
-}
-
-std::string BOOST_RESOLVE( const std::string& filename )
-{
-    if( data_directory.empty() )
-        return filename;
-    return data_directory + '/' + filename;
-}
+#include <CL/cl.h>
 
 namespace
 {
@@ -176,4 +140,9 @@ BOOST_AUTO_TEST_CASE( test3 )
     // Compute and compare results for golden-host and report errors and pass/fail
     VectorAddHost( (const float*)srcA, (const float*)srcB, (float*)Golden, iNumElements );
     BOOST_CHECK_EQUAL( 0, shrDiffArray(( const float*)dst, (const float*)Golden, iNumElements ) );
+    free( srcA );
+    free( srcB );
+    free( dst );
+    free( Golden );
+    free( cdDevices );
 }
