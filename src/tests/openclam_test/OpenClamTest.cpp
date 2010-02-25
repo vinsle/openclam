@@ -8,7 +8,6 @@
 
 #include "Test.h"
 #include "openclam/cl.hpp"
-#include <math.h>
 #include <CL/cl.h>
 
 namespace
@@ -60,7 +59,7 @@ namespace
     {
         int iErrorCount = 0, i;
         for( i = 0; i < iNumElements; i++ )
-            if( fabs( pfResult2[ i ] - pfResult1[ i ] ) > 1e-5 ) 
+            if( std::abs( pfResult2[ i ] - pfResult1[ i ] ) > 1e-5 ) 
                 iErrorCount++;
         return iErrorCount;
     }
