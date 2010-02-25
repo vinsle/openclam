@@ -32,8 +32,8 @@ namespace
     char* cSourceCL = NULL;
     int iNumElements = 11444777;
 
-    KERNEL( const char * addKernel,
-    void VectorAdd( GLOBAL const float* a, GLOBAL const float* b, GLOBAL float* c, int iNumElements )
+    const char * addKernel = KERNEL(
+    __kernel void VectorAdd( __global const float* a, __global const float* b, __global float* c, int iNumElements )
     {
         const int iGID = get_global_id( 0 );
         if( iGID >= iNumElements )

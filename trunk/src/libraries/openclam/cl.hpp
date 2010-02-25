@@ -9,15 +9,15 @@
 #ifndef OPENCLAM_CL_HPP_INCLUDED
 #define OPENCLAM_CL_HPP_INCLUDED
 
-int get_global_id( unsigned int index );
+int get_global_id( unsigned int ){ return 0; }
 
-#define GLOBAL __global
+#define __kernel
+#define __global
 
-#define COMPILE( SOURCES ) SOURCES;
+#define APPLY_DEFINES( SOURCES ) SOURCES;
 
-#define APPLY_DEFINES( VARIABLE, SOURCES ) VARIABLE = #SOURCES
-
-#define KERNEL( VARIABLE, SOURCES ) \
-        APPLY_DEFINES( VARIABLE, __kernel SOURCES )
+#define KERNEL( SOURCES ) \
+        #SOURCES; \
+        APPLY_DEFINES( SOURCES);
 
 #endif // #ifndef OPENCLAM_CL_HPP_INCLUDED
