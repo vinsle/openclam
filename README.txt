@@ -1,0 +1,1 @@
+builds only against OpenCL.lib from NVIDIA GPU Computing SDK for Win32 (http://developer.download.nvidia.com/compute/cuda/3_0-Beta1/sdk/gpucomputingsdk_3.0-beta1_win_32.exe)
