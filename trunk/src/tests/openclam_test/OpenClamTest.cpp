@@ -51,54 +51,52 @@ BOOST_AUTO_TEST_CASE( setting_up_openclam_framework )
     }
 
     // Create the OpenCL context on a GPU device
-    cl_int err1, err2;
-    cl_context cxGPUContext = clCreateContextFromType( 0, CL_DEVICE_TYPE_GPU, NULL, NULL, &err1 );
+    cl_int error;
+    cl_context cxGPUContext = clCreateContextFromType( 0, CL_DEVICE_TYPE_GPU, NULL, NULL, &error );
 
     // Get the list of GPU devices associated with context
     unsigned int szParmDataBytes;
-    err1 = clGetContextInfo( cxGPUContext, CL_CONTEXT_DEVICES, 0, NULL, &szParmDataBytes );
+    error = clGetContextInfo( cxGPUContext, CL_CONTEXT_DEVICES, 0, NULL, &szParmDataBytes );
     std::auto_ptr< cl_device_id > cdDevices( new cl_device_id[ szParmDataBytes ] );
-    err1 |= clGetContextInfo( cxGPUContext, CL_CONTEXT_DEVICES, szParmDataBytes, cdDevices.get(), NULL );
+    error |= clGetContextInfo( cxGPUContext, CL_CONTEXT_DEVICES, szParmDataBytes, cdDevices.get(), NULL );
 
     // Create a command-queue
-    cl_command_queue cqCommandQue = clCreateCommandQueue( cxGPUContext, cdDevices.get()[ 0 ], 0, &err1 );
+    cl_command_queue cqCommandQue = clCreateCommandQueue( cxGPUContext, cdDevices.get()[ 0 ], 0, &error );
 
     // Allocate the OpenCL buffer memory objects for source and result on the device GMEM
-    cl_mem cmDevSrcA = clCreateBuffer( cxGPUContext, CL_MEM_READ_ONLY, sizeof(cl_float) * globalSize, NULL, &err1 );
-    cl_mem cmDevSrcB = clCreateBuffer( cxGPUContext, CL_MEM_READ_ONLY, sizeof(cl_float) * globalSize, NULL, &err2 );
-    err1 |= err2;
-    cl_mem cmDevDst = clCreateBuffer( cxGPUContext, CL_MEM_WRITE_ONLY, sizeof(cl_float) * globalSize, NULL, &err2 );
-    err1 |= err2;
+    cl_mem cmDevSrcA = clCreateBuffer( cxGPUContext, CL_MEM_READ_ONLY, sizeof(cl_float) * globalSize, NULL, &error );
+    cl_mem cmDevSrcB = clCreateBuffer( cxGPUContext, CL_MEM_READ_ONLY, sizeof(cl_float) * globalSize, NULL, &error );
+    cl_mem cmDevDst = clCreateBuffer( cxGPUContext, CL_MEM_WRITE_ONLY, sizeof(cl_float) * globalSize, NULL, &error );
 
     // Create the program
     unsigned int szKernelLength;
     szKernelLength = strlen( addKernel );
-    cl_program cpProgram = clCreateProgramWithSource( cxGPUContext, 1, (const char **)&addKernel, &szKernelLength, &err1 );
+    cl_program cpProgram = clCreateProgramWithSource( cxGPUContext, 1, (const char **)&addKernel, &szKernelLength, &error );
 
     // Build the program
-    err1 = clBuildProgram( cpProgram, 0, NULL, NULL, NULL, NULL );
+    error = clBuildProgram( cpProgram, 0, NULL, NULL, NULL, NULL );
 
     // Create the kernel
-    cl_kernel ckKernel = clCreateKernel( cpProgram, "VectorAdd", &err1 );
+    cl_kernel ckKernel = clCreateKernel( cpProgram, "VectorAdd", &error );
 
     // Set the Argument values
-    err1 = clSetKernelArg( ckKernel, 0, sizeof(cl_mem), (void*)&cmDevSrcA );
-    err1 |= clSetKernelArg( ckKernel, 1, sizeof(cl_mem), (void*)&cmDevSrcB );
-    err1 |= clSetKernelArg( ckKernel, 2, sizeof(cl_mem), (void*)&cmDevDst );
-    err1 |= clSetKernelArg( ckKernel, 3, sizeof(cl_int), (void*)&size );
+    error = clSetKernelArg( ckKernel, 0, sizeof(cl_mem), (void*)&cmDevSrcA );
+    error |= clSetKernelArg( ckKernel, 1, sizeof(cl_mem), (void*)&cmDevSrcB );
+    error |= clSetKernelArg( ckKernel, 2, sizeof(cl_mem), (void*)&cmDevDst );
+    error |= clSetKernelArg( ckKernel, 3, sizeof(cl_int), (void*)&size );
 
     // --------------------------------------------------------
     // Start Core sequence... copy input data to GPU, compute, copy results back
 
     // Asynchronous write of data to GPU device
-    err1 = clEnqueueWriteBuffer( cqCommandQue, cmDevSrcA, CL_FALSE, 0, sizeof(cl_float) * globalSize, srcA.get(), 0, NULL, NULL );
-    err1 |= clEnqueueWriteBuffer( cqCommandQue, cmDevSrcB, CL_FALSE, 0, sizeof(cl_float) * globalSize, srcB.get(), 0, NULL, NULL );
+    error = clEnqueueWriteBuffer( cqCommandQue, cmDevSrcA, CL_FALSE, 0, sizeof(cl_float) * globalSize, srcA.get(), 0, NULL, NULL );
+    error |= clEnqueueWriteBuffer( cqCommandQue, cmDevSrcB, CL_FALSE, 0, sizeof(cl_float) * globalSize, srcB.get(), 0, NULL, NULL );
 
     // Launch kernel
-    err1 = clEnqueueNDRangeKernel( cqCommandQue, ckKernel, 1, NULL, &globalSize, &localSize, 0, NULL, NULL );
+    error = clEnqueueNDRangeKernel( cqCommandQue, ckKernel, 1, NULL, &globalSize, &localSize, 0, NULL, NULL );
 
     // Synchronous/blocking read of results, and check accumulated errors
-    err1 = clEnqueueReadBuffer( cqCommandQue, cmDevDst, CL_TRUE, 0, sizeof(cl_float) * globalSize, dst.get(), 0, NULL, NULL );
+    error = clEnqueueReadBuffer( cqCommandQue, cmDevDst, CL_TRUE, 0, sizeof(cl_float) * globalSize, dst.get(), 0, NULL, NULL );
     //--------------------------------------------------------
 
     // Compute and compare results for golden-host and report errors and pass/fail
