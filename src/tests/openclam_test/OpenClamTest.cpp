@@ -31,14 +31,6 @@ namespace
             return global_size;
         return global_size + group_size - r;
     }
-    int shrDiffArray( const float* pfResult1, const float* pfResult2, int iNumElements )
-    {
-        int iErrorCount = 0, i;
-        for( i = 0; i < iNumElements; i++ )
-            if( std::abs( pfResult2[ i ] - pfResult1[ i ] ) > 1e-5 ) 
-                iErrorCount++;
-        return iErrorCount;
-    }
 }
 
 BOOST_AUTO_TEST_CASE( test3 )
