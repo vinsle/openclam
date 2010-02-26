@@ -157,6 +157,14 @@
 				RelativePath="..\..\src\libraries\openclam\cl.hpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\src\libraries\openclam\Context.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\libraries\openclam\Error.hpp"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
