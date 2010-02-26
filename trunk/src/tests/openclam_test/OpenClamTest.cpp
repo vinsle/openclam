@@ -71,7 +71,7 @@ BOOST_AUTO_TEST_CASE( setting_up_openclam_framework )
     // Create the program
     unsigned int szKernelLength;
     szKernelLength = strlen( addKernel );
-    cl_program cpProgram = clCreateProgramWithSource( cxGPUContext, 1, (const char **)&addKernel, &szKernelLength, &error );
+    cl_program cpProgram = clCreateProgramWithSource( cxGPUContext, 1, &addKernel, &szKernelLength, &error );
 
     // Build the program
     error = clBuildProgram( cpProgram, 0, NULL, NULL, NULL, NULL );
@@ -80,10 +80,10 @@ BOOST_AUTO_TEST_CASE( setting_up_openclam_framework )
     cl_kernel ckKernel = clCreateKernel( cpProgram, "VectorAdd", &error );
 
     // Set the Argument values
-    error = clSetKernelArg( ckKernel, 0, sizeof(cl_mem), (void*)&cmDevSrcA );
-    error |= clSetKernelArg( ckKernel, 1, sizeof(cl_mem), (void*)&cmDevSrcB );
-    error |= clSetKernelArg( ckKernel, 2, sizeof(cl_mem), (void*)&cmDevDst );
-    error |= clSetKernelArg( ckKernel, 3, sizeof(cl_int), (void*)&size );
+    error = clSetKernelArg( ckKernel, 0, sizeof(cl_mem), &cmDevSrcA );
+    error |= clSetKernelArg( ckKernel, 1, sizeof(cl_mem), &cmDevSrcB );
+    error |= clSetKernelArg( ckKernel, 2, sizeof(cl_mem), &cmDevDst );
+    error |= clSetKernelArg( ckKernel, 3, sizeof(cl_int), &size );
 
     // --------------------------------------------------------
     // Start Core sequence... copy input data to GPU, compute, copy results back
