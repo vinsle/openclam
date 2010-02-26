@@ -69,8 +69,7 @@ BOOST_AUTO_TEST_CASE( setting_up_openclam_framework )
     cl_mem cmDevDst = clCreateBuffer( cxGPUContext, CL_MEM_WRITE_ONLY, sizeof(cl_float) * globalSize, NULL, &error );
 
     // Create the program
-    unsigned int szKernelLength;
-    szKernelLength = strlen( addKernel );
+    const unsigned int szKernelLength = strlen( addKernel );
     cl_program cpProgram = clCreateProgramWithSource( cxGPUContext, 1, &addKernel, &szKernelLength, &error );
 
     // Build the program
