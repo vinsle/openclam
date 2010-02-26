@@ -9,6 +9,8 @@
 #ifndef OPENCLAM_CL_HPP_INCLUDED
 #define OPENCLAM_CL_HPP_INCLUDED
 
+#include <CL/cl.h>
+
 int get_global_id( unsigned int ){ return 0; }
 
 #define __kernel
