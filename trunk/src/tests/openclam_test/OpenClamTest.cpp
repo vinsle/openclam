@@ -15,10 +15,10 @@ namespace
     const float added = 3.f;
 
     const char * addKernel = KERNEL(
-        __kernel void VectorAdd( __global const float* a, __global const float* b, __global float* c, unsigned int iNumElements )
+        __kernel void VectorAdd( __global const float* a, __global const float* b, __global float* c, unsigned int size )
     {
         const unsigned int iGID = get_global_id( 0 );
-        if( iGID >= iNumElements )
+        if( iGID >= size )
             return;
         c[ iGID ] = a[ iGID ] + b[ iGID ];
     } );
@@ -35,16 +35,16 @@ namespace
 BOOST_AUTO_TEST_CASE( setting_up_openclam_framework )
 {
     // set and log Global and Local work size dimensions
-    const unsigned int iNumElements = 100u;
-    const unsigned int szLocalWorkSize = 256;
-    const unsigned int szGlobalWorkSize = shrRoundUp( szLocalWorkSize, iNumElements );  // rounded up to the nearest multiple of the LocalWorkSize
+    const unsigned int size = 100u;
+    const unsigned int localSize = 256;
+    const unsigned int globalSize = shrRoundUp( localSize, size );  // rounded up to the nearest multiple of the LocalWorkSize
 
-    std::auto_ptr< float >srcA( new float[ szGlobalWorkSize ] );
-    std::auto_ptr< float >srcB( new float[ szGlobalWorkSize ] );
-    std::auto_ptr< float >dst( new float[ szGlobalWorkSize ] );
+    std::auto_ptr< float >srcA( new float[ globalSize ] );
+    std::auto_ptr< float >srcB( new float[ globalSize ] );
+    std::auto_ptr< float >dst( new float[ globalSize ] );
 
     // Allocate and initialize host arrays 
-    for( unsigned int i = 0; i < iNumElements; ++i )
+    for( unsigned int i = 0; i < size; ++i )
     {
         srcA.get()[ i ] = static_cast< float >( i );
         srcB.get()[ i ] = added;
@@ -64,10 +64,10 @@ BOOST_AUTO_TEST_CASE( setting_up_openclam_framework )
     cl_command_queue cqCommandQue = clCreateCommandQueue( cxGPUContext, cdDevices.get()[ 0 ], 0, &ciErr1 );
 
     // Allocate the OpenCL buffer memory objects for source and result on the device GMEM
-    cl_mem cmDevSrcA = clCreateBuffer( cxGPUContext, CL_MEM_READ_ONLY, sizeof(cl_float) * szGlobalWorkSize, NULL, &ciErr1 );
-    cl_mem cmDevSrcB = clCreateBuffer( cxGPUContext, CL_MEM_READ_ONLY, sizeof(cl_float) * szGlobalWorkSize, NULL, &ciErr2 );
+    cl_mem cmDevSrcA = clCreateBuffer( cxGPUContext, CL_MEM_READ_ONLY, sizeof(cl_float) * globalSize, NULL, &ciErr1 );
+    cl_mem cmDevSrcB = clCreateBuffer( cxGPUContext, CL_MEM_READ_ONLY, sizeof(cl_float) * globalSize, NULL, &ciErr2 );
     ciErr1 |= ciErr2;
-    cl_mem cmDevDst = clCreateBuffer( cxGPUContext, CL_MEM_WRITE_ONLY, sizeof(cl_float) * szGlobalWorkSize, NULL, &ciErr2 );
+    cl_mem cmDevDst = clCreateBuffer( cxGPUContext, CL_MEM_WRITE_ONLY, sizeof(cl_float) * globalSize, NULL, &ciErr2 );
     ciErr1 |= ciErr2;
 
     // Create the program
@@ -85,23 +85,23 @@ BOOST_AUTO_TEST_CASE( setting_up_openclam_framework )
     ciErr1 = clSetKernelArg( ckKernel, 0, sizeof(cl_mem), (void*)&cmDevSrcA );
     ciErr1 |= clSetKernelArg( ckKernel, 1, sizeof(cl_mem), (void*)&cmDevSrcB );
     ciErr1 |= clSetKernelArg( ckKernel, 2, sizeof(cl_mem), (void*)&cmDevDst );
-    ciErr1 |= clSetKernelArg( ckKernel, 3, sizeof(cl_int), (void*)&iNumElements );
+    ciErr1 |= clSetKernelArg( ckKernel, 3, sizeof(cl_int), (void*)&size );
 
     // --------------------------------------------------------
     // Start Core sequence... copy input data to GPU, compute, copy results back
 
     // Asynchronous write of data to GPU device
-    ciErr1 = clEnqueueWriteBuffer( cqCommandQue, cmDevSrcA, CL_FALSE, 0, sizeof(cl_float) * szGlobalWorkSize, srcA.get(), 0, NULL, NULL );
-    ciErr1 |= clEnqueueWriteBuffer( cqCommandQue, cmDevSrcB, CL_FALSE, 0, sizeof(cl_float) * szGlobalWorkSize, srcB.get(), 0, NULL, NULL );
+    ciErr1 = clEnqueueWriteBuffer( cqCommandQue, cmDevSrcA, CL_FALSE, 0, sizeof(cl_float) * globalSize, srcA.get(), 0, NULL, NULL );
+    ciErr1 |= clEnqueueWriteBuffer( cqCommandQue, cmDevSrcB, CL_FALSE, 0, sizeof(cl_float) * globalSize, srcB.get(), 0, NULL, NULL );
 
     // Launch kernel
-    ciErr1 = clEnqueueNDRangeKernel( cqCommandQue, ckKernel, 1, NULL, &szGlobalWorkSize, &szLocalWorkSize, 0, NULL, NULL );
+    ciErr1 = clEnqueueNDRangeKernel( cqCommandQue, ckKernel, 1, NULL, &globalSize, &localSize, 0, NULL, NULL );
 
     // Synchronous/blocking read of results, and check accumulated errors
-    ciErr1 = clEnqueueReadBuffer( cqCommandQue, cmDevDst, CL_TRUE, 0, sizeof(cl_float) * szGlobalWorkSize, dst.get(), 0, NULL, NULL );
+    ciErr1 = clEnqueueReadBuffer( cqCommandQue, cmDevDst, CL_TRUE, 0, sizeof(cl_float) * globalSize, dst.get(), 0, NULL, NULL );
     //--------------------------------------------------------
 
     // Compute and compare results for golden-host and report errors and pass/fail
-    for( unsigned int i = 0; i < iNumElements; ++i )
+    for( unsigned int i = 0; i < size; ++i )
         BOOST_CHECK_EQUAL( srcA.get()[ i ] + added, dst.get()[ i ] );
 }
