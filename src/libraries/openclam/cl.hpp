@@ -11,7 +11,7 @@
 
 #include <CL/cl.h>
 
-int get_global_id( unsigned int ){ return 0; }
+unsigned int get_global_id( unsigned int ){ return 0; }
 
 #define __kernel
 #define kernel
