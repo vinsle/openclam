@@ -55,10 +55,10 @@ BOOST_AUTO_TEST_CASE( setting_up_openclam_framework )
     cl_context cxGPUContext = clCreateContextFromType( 0, CL_DEVICE_TYPE_GPU, NULL, NULL, &error );
 
     // Get the list of GPU devices associated with context
-    unsigned int szParmDataBytes;
-    error = clGetContextInfo( cxGPUContext, CL_CONTEXT_DEVICES, 0, NULL, &szParmDataBytes );
-    std::auto_ptr< cl_device_id > cdDevices( new cl_device_id[ szParmDataBytes ] );
-    error |= clGetContextInfo( cxGPUContext, CL_CONTEXT_DEVICES, szParmDataBytes, cdDevices.get(), NULL );
+    unsigned int deviceSize;
+    error = clGetContextInfo( cxGPUContext, CL_CONTEXT_DEVICES, 0, NULL, &deviceSize );
+    std::auto_ptr< cl_device_id > cdDevices( new cl_device_id[ deviceSize ] );
+    error |= clGetContextInfo( cxGPUContext, CL_CONTEXT_DEVICES, deviceSize, cdDevices.get(), NULL );
 
     // Create a command-queue
     cl_command_queue cqCommandQue = clCreateCommandQueue( cxGPUContext, cdDevices.get()[ 0 ], 0, &error );
