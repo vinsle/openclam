@@ -53,15 +53,13 @@ BOOST_AUTO_TEST_CASE( setting_up_openclam_framework )
     // Create the OpenCL context on a GPU device
     cl_int error;
     cl_context cxGPUContext = clCreateContextFromType( 0, CL_DEVICE_TYPE_GPU, NULL, NULL, &error );
-
+    openclam::Context( openclam::GPU );
+    
     // Get the list of GPU devices associated with context
     unsigned int deviceSize;
     error = clGetContextInfo( cxGPUContext, CL_CONTEXT_DEVICES, 0, NULL, &deviceSize );
     std::auto_ptr< cl_device_id > cdDevices( new cl_device_id[ deviceSize ] );
     error |= clGetContextInfo( cxGPUContext, CL_CONTEXT_DEVICES, deviceSize, cdDevices.get(), NULL );
-
-    // Create a command-queue
-    cl_command_queue cqCommandQue = clCreateCommandQueue( cxGPUContext, cdDevices.get()[ 0 ], 0, &error );
 
     // Allocate the OpenCL buffer memory objects for source and result on the device GMEM
     cl_mem cmDevSrcA = clCreateBuffer( cxGPUContext, CL_MEM_READ_ONLY, sizeof(cl_float) * globalSize, NULL, &error );
@@ -86,6 +84,8 @@ BOOST_AUTO_TEST_CASE( setting_up_openclam_framework )
 
     // --------------------------------------------------------
     // Start Core sequence... copy input data to GPU, compute, copy results back
+    // Create a command-queue
+    cl_command_queue cqCommandQue = clCreateCommandQueue( cxGPUContext, cdDevices.get()[ 0 ], 0, &error );
 
     // Asynchronous write of data to GPU device
     error = clEnqueueWriteBuffer( cqCommandQue, cmDevSrcA, CL_FALSE, 0, sizeof(cl_float) * globalSize, srcA.get(), 0, NULL, NULL );
