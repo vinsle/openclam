@@ -16,8 +16,11 @@ int get_global_id( unsigned int ){ return 0; }
 
 #define APPLY_DEFINES( SOURCES ) SOURCES;
 
-#define KERNEL( SOURCES ) \
-        #SOURCES; \
-        APPLY_DEFINES( SOURCES);
+#define KERNEL( SOURCES )               \
+        #SOURCES;                       \
+        namespace                       \
+        {                               \
+            APPLY_DEFINES( SOURCES );   \
+        }
 
 #endif // #ifndef OPENCLAM_CL_HPP_INCLUDED
