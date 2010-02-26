@@ -12,7 +12,10 @@
 int get_global_id( unsigned int ){ return 0; }
 
 #define __kernel
+#define kernel
+
 #define __global
+#define global
 
 #define APPLY_DEFINES( SOURCES ) SOURCES;
 
