@@ -30,7 +30,7 @@ namespace
     cl_int ciErr1, ciErr2;
     char* cPathAndName = NULL;
     char* cSourceCL = NULL;
-    int iNumElements = 11444777;
+    int iNumElements = 100;
 
     const char * addKernel = KERNEL(
     __kernel void VectorAdd( __global const float* a, __global const float* b, __global float* c, int iNumElements )
