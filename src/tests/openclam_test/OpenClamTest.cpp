@@ -8,7 +8,6 @@
 
 #include "Test.h"
 #include "openclam/cl.hpp"
-#include <CL/cl.h>
 #include <memory>
 
 namespace
