@@ -32,7 +32,7 @@ namespace
     }
 }
 
-BOOST_AUTO_TEST_CASE( test3 )
+BOOST_AUTO_TEST_CASE( setting_up_openclam_framework )
 {
     // set and log Global and Local work size dimensions
     const unsigned int iNumElements = 100u;
