@@ -13,10 +13,11 @@
 
 namespace
 {
-    const unsigned int iNumElements = 100;
+    const unsigned int iNumElements = 100u;
+    const float added = 3.f;
 
     const char * addKernel = KERNEL(
-    __kernel void VectorAdd( __global const float* a, __global const float* b, __global float* c, int iNumElements )
+        __kernel void VectorAdd( __global const float* a, __global const float* b, __global float* c, int iNumElements )
     {
         const int iGID = get_global_id( 0 );
         if( iGID >= iNumElements )
@@ -31,13 +32,6 @@ namespace
             return global_size;
         return global_size + group_size - r;
     }
-    void shrFillArray( float* pfData, int iSize )
-    {
-        int i;
-        const float fScale = 1.0f / (float)RAND_MAX;
-        for( i = 0; i < iSize; ++i ) 
-            pfData[i] = fScale * rand();
-    }
     int shrDiffArray( const float* pfResult1, const float* pfResult2, int iNumElements )
     {
         int iErrorCount = 0, i;
@@ -45,14 +39,6 @@ namespace
             if( std::abs( pfResult2[ i ] - pfResult1[ i ] ) > 1e-5 ) 
                 iErrorCount++;
         return iErrorCount;
-    }
-    // "Golden" Host processing vector addition function for comparison purposes
-    // *********************************************************************
-    void VectorAddHost( const float* pfData1, const float* pfData2, float* pfResult, int iNumElements )
-    {
-        int i;
-        for ( i = 0; i < iNumElements; i++ ) 
-            pfResult[ i ] = pfData1[ i ] + pfData2[ i ]; 
     }
 }
 
@@ -65,7 +51,6 @@ BOOST_AUTO_TEST_CASE( test3 )
     std::auto_ptr< float >srcA( new float[ szGlobalWorkSize ] );
     std::auto_ptr< float >srcB( new float[ szGlobalWorkSize ] );
     std::auto_ptr< float >dst( new float[ szGlobalWorkSize ] );
-    float Golden[ iNumElements ];
 
     cl_context cxGPUContext;
     cl_command_queue cqCommandQue;
@@ -79,8 +64,10 @@ BOOST_AUTO_TEST_CASE( test3 )
     cl_int ciErr1, ciErr2;
 
     // Allocate and initialize host arrays 
-    shrFillArray( srcA.get(), iNumElements );
-    shrFillArray( srcB.get(), iNumElements );
+    for( unsigned int i = 0; i < iNumElements; ++i )
+        srcA.get()[ i ] = static_cast< float >( i );
+    for( unsigned int i = 0; i < iNumElements; ++i )
+        srcB.get()[ i ] = added;
 
     // Create the OpenCL context on a GPU device
     cxGPUContext = clCreateContextFromType( 0, CL_DEVICE_TYPE_GPU, NULL, NULL, &ciErr1 );
@@ -131,6 +118,6 @@ BOOST_AUTO_TEST_CASE( test3 )
     //--------------------------------------------------------
 
     // Compute and compare results for golden-host and report errors and pass/fail
-    VectorAddHost( srcA.get(), srcB.get(), Golden, iNumElements );
-    BOOST_CHECK_EQUAL( 0, shrDiffArray( dst.get(), Golden, iNumElements ) );
+    for( unsigned int i = 0; i < iNumElements; ++i )
+        BOOST_CHECK_EQUAL( srcA.get()[ i ] + added, dst.get()[ i ] );
 }
