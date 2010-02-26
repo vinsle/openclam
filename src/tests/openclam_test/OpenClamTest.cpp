@@ -45,9 +45,10 @@ BOOST_AUTO_TEST_CASE( setting_up_openclam_framework )
 
     // Allocate and initialize host arrays 
     for( unsigned int i = 0; i < iNumElements; ++i )
+    {
         srcA.get()[ i ] = static_cast< float >( i );
-    for( unsigned int i = 0; i < iNumElements; ++i )
         srcB.get()[ i ] = added;
+    }
 
     // Create the OpenCL context on a GPU device
     cl_int ciErr1, ciErr2;
