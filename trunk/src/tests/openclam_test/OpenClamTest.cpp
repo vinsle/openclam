@@ -9,28 +9,11 @@
 #include "Test.h"
 #include "openclam/cl.hpp"
 #include <CL/cl.h>
+#include <memory>
 
 namespace
 {
-    void *srcA, *srcB, *dst;
-    void* Golden;
-
-    cl_context cxGPUContext;
-    cl_command_queue cqCommandQue;
-    cl_device_id* cdDevices;
-    cl_program cpProgram;
-    cl_kernel ckKernel;
-    cl_mem cmDevSrcA;
-    cl_mem cmDevSrcB;
-    cl_mem cmDevDst;
-    size_t szGlobalWorkSize;
-    size_t szLocalWorkSize;
-    size_t szParmDataBytes;
-    size_t szKernelLength;
-    cl_int ciErr1, ciErr2;
-    char* cPathAndName = NULL;
-    char* cSourceCL = NULL;
-    int iNumElements = 100;
+    const unsigned int iNumElements = 100;
 
     const char * addKernel = KERNEL(
     __kernel void VectorAdd( __global const float* a, __global const float* b, __global float* c, int iNumElements )
@@ -71,33 +54,44 @@ namespace
         for ( i = 0; i < iNumElements; i++ ) 
             pfResult[ i ] = pfData1[ i ] + pfData2[ i ]; 
     }
-
 }
 
 BOOST_AUTO_TEST_CASE( test3 )
 {
     // set and log Global and Local work size dimensions
-    szLocalWorkSize = 256;
-    szGlobalWorkSize = shrRoundUp( (int)szLocalWorkSize, iNumElements );  // rounded up to the nearest multiple of the LocalWorkSize
+    const size_t szLocalWorkSize = 256;
+    const size_t szGlobalWorkSize = shrRoundUp( szLocalWorkSize, iNumElements );  // rounded up to the nearest multiple of the LocalWorkSize
+
+    std::auto_ptr< float >srcA( new float[ szGlobalWorkSize ] );
+    std::auto_ptr< float >srcB( new float[ szGlobalWorkSize ] );
+    std::auto_ptr< float >dst( new float[ szGlobalWorkSize ] );
+    float Golden[ iNumElements ];
+
+    cl_context cxGPUContext;
+    cl_command_queue cqCommandQue;
+    cl_program cpProgram;
+    cl_kernel ckKernel;
+    cl_mem cmDevSrcA;
+    cl_mem cmDevSrcB;
+    cl_mem cmDevDst;
+    size_t szParmDataBytes;
+    size_t szKernelLength;
+    cl_int ciErr1, ciErr2;
 
     // Allocate and initialize host arrays 
-    srcA = (void *)malloc( sizeof( cl_float ) * szGlobalWorkSize );
-    srcB = (void *)malloc( sizeof( cl_float ) * szGlobalWorkSize );
-    dst = (void *)malloc( sizeof(cl_float ) * szGlobalWorkSize );
-    Golden = (void *)malloc( sizeof(cl_float) * iNumElements );
-    shrFillArray( (float*)srcA, iNumElements );
-    shrFillArray( (float*)srcB, iNumElements );
+    shrFillArray( srcA.get(), iNumElements );
+    shrFillArray( srcB.get(), iNumElements );
 
     // Create the OpenCL context on a GPU device
     cxGPUContext = clCreateContextFromType( 0, CL_DEVICE_TYPE_GPU, NULL, NULL, &ciErr1 );
 
     // Get the list of GPU devices associated with context
     ciErr1 = clGetContextInfo( cxGPUContext, CL_CONTEXT_DEVICES, 0, NULL, &szParmDataBytes );
-    cdDevices = ( cl_device_id* )malloc( szParmDataBytes );
-    ciErr1 |= clGetContextInfo( cxGPUContext, CL_CONTEXT_DEVICES, szParmDataBytes, cdDevices, NULL );
+    std::auto_ptr< cl_device_id > cdDevices( new cl_device_id[ szParmDataBytes ] );
+    ciErr1 |= clGetContextInfo( cxGPUContext, CL_CONTEXT_DEVICES, szParmDataBytes, cdDevices.get(), NULL );
 
     // Create a command-queue
-    cqCommandQue = clCreateCommandQueue( cxGPUContext, cdDevices[ 0 ], 0, &ciErr1 );
+    cqCommandQue = clCreateCommandQueue( cxGPUContext, cdDevices.get()[ 0 ], 0, &ciErr1 );
 
     // Allocate the OpenCL buffer memory objects for source and result on the device GMEM
     cmDevSrcA = clCreateBuffer( cxGPUContext, CL_MEM_READ_ONLY, sizeof(cl_float) * szGlobalWorkSize, NULL, &ciErr1 );
@@ -126,22 +120,17 @@ BOOST_AUTO_TEST_CASE( test3 )
     // Start Core sequence... copy input data to GPU, compute, copy results back
 
     // Asynchronous write of data to GPU device
-    ciErr1 = clEnqueueWriteBuffer( cqCommandQue, cmDevSrcA, CL_FALSE, 0, sizeof(cl_float) * szGlobalWorkSize, srcA, 0, NULL, NULL );
-    ciErr1 |= clEnqueueWriteBuffer( cqCommandQue, cmDevSrcB, CL_FALSE, 0, sizeof(cl_float) * szGlobalWorkSize, srcB, 0, NULL, NULL );
+    ciErr1 = clEnqueueWriteBuffer( cqCommandQue, cmDevSrcA, CL_FALSE, 0, sizeof(cl_float) * szGlobalWorkSize, srcA.get(), 0, NULL, NULL );
+    ciErr1 |= clEnqueueWriteBuffer( cqCommandQue, cmDevSrcB, CL_FALSE, 0, sizeof(cl_float) * szGlobalWorkSize, srcB.get(), 0, NULL, NULL );
 
     // Launch kernel
     ciErr1 = clEnqueueNDRangeKernel( cqCommandQue, ckKernel, 1, NULL, &szGlobalWorkSize, &szLocalWorkSize, 0, NULL, NULL );
 
     // Synchronous/blocking read of results, and check accumulated errors
-    ciErr1 = clEnqueueReadBuffer( cqCommandQue, cmDevDst, CL_TRUE, 0, sizeof(cl_float) * szGlobalWorkSize, dst, 0, NULL, NULL );
+    ciErr1 = clEnqueueReadBuffer( cqCommandQue, cmDevDst, CL_TRUE, 0, sizeof(cl_float) * szGlobalWorkSize, dst.get(), 0, NULL, NULL );
     //--------------------------------------------------------
 
     // Compute and compare results for golden-host and report errors and pass/fail
-    VectorAddHost( (const float*)srcA, (const float*)srcB, (float*)Golden, iNumElements );
-    BOOST_CHECK_EQUAL( 0, shrDiffArray(( const float*)dst, (const float*)Golden, iNumElements ) );
-    free( srcA );
-    free( srcB );
-    free( dst );
-    free( Golden );
-    free( cdDevices );
+    VectorAddHost( srcA.get(), srcB.get(), Golden, iNumElements );
+    BOOST_CHECK_EQUAL( 0, shrDiffArray( dst.get(), Golden, iNumElements ) );
 }
