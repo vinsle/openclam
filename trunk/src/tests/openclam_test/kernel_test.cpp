@@ -13,20 +13,18 @@
 BOOST_AUTO_TEST_CASE( simple_kernel_instanciation )
 {
     const std::string expected =
-        "__kernel void VectorAdd( __global const float* a, __global const float* b, __global float* c, unsigned int size ) "
+        "__kernel void MyKernel( __global const float* a, global unsigned int size ) "
         "{ "
-        "const unsigned int iGID = get_global_id( 0 ); "
-        "if( iGID >= size ) "
-        "return; "
-        "c[ iGID ] = a[ iGID ] + b[ iGID ]; "
+        "const unsigned int id = get_global_id( 0 ); "
+        "a[ id ]; "
+        "size; "
         "}";
-    const std::string actual = KERNEL( VectorAdd,
-        __kernel void VectorAdd( __global const float* a, __global const float* b, __global float* c, unsigned int size )
+    const std::string actual = KERNEL( MyKernel,
+        __kernel void MyKernel( __global const float* a, global unsigned int size )
         {
-            const unsigned int iGID = get_global_id( 0 );
-            if( iGID >= size )
-                return;
-            c[ iGID ] = a[ iGID ] + b[ iGID ];
+            const unsigned int id = get_global_id( 0 );
+            a[ id ];
+            size;
         } );
     BOOST_CHECK_EQUAL( actual, expected );
 }
