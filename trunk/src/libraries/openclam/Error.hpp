@@ -9,7 +9,10 @@
 #ifndef OPENCLAM_ERROR_HPP_INCLUDED
 #define OPENCLAM_ERROR_HPP_INCLUDED
 
+#pragma warning( push )
+#pragma warning( disable: 4702 )
 #include <boost/lexical_cast.hpp>
+#pragma warning( pop )
 
 #define ERROR_HANDLER( CODE )   \
     cl_int error;               \
