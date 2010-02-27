@@ -9,6 +9,14 @@
 #include "test.h"
 #include "openclam/cl.hpp"
 
+//BOOST_AUTO_TEST_CASE( kernel_keyword_is_a_valid_identifier ) // $$$$ 27-02-2010 SILVIN: uncomment this test related to issue 1 (http://code.google.com/p/openclam/issues/detail?id=1)
+//{
+//    const std::string kernel   = "";
+//    const std::string __kernel = "";
+//    const std::string global   = "";
+//    const std::string __global = "";
+//}
+
 BOOST_AUTO_TEST_CASE( kernel_keyword_substitution_test )
 {
     const std::string expected =
