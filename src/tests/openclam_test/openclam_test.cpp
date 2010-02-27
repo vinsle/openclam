@@ -6,7 +6,7 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#include "Test.h"
+#include "test.h"
 #include "openclam/cl.hpp"
 #include <memory>
 
@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE( setting_up_openclam_framework )
     // Create the OpenCL context on a GPU device
     cl_int error;
     cl_context cxGPUContext = clCreateContextFromType( 0, CL_DEVICE_TYPE_GPU, NULL, NULL, &error );
-    openclam::Context context( openclam::Gpu );
+    openclam::context context( openclam::Gpu );
     
     // Get the list of GPU devices associated with context
     unsigned int deviceSize;
