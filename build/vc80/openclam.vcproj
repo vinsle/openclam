@@ -158,11 +158,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\libraries\openclam\Context.hpp"
+				RelativePath="..\..\src\libraries\openclam\context.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\libraries\openclam\Error.hpp"
+				RelativePath="..\..\src\libraries\openclam\error.hpp"
 				>
 			</File>
 		</Filter>
