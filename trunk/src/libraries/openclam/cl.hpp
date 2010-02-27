@@ -12,26 +12,6 @@
 #include <CL/cl.h>
 #include "error.hpp"
 #include "context.hpp"
-#include "builtin.hpp"
+#include "kernel.hpp"
 
-#define __kernel
-#define kernel
-
-#define __global
-#define global
-
-#define APPLY_DEFINES( NAME, FUNCTION )      \
-class NAME_CLASS : private openclam::builtin \
-{                                            \
-private:                                     \
-             NAME_CLASS() {}                 \
-    virtual ~NAME_CLASS() {}                 \
-                                             \
-    FUNCTION;                                \
-};                                           \
-
-#define KERNEL( NAME, FUNCTION ) \
-#FUNCTION;                       \
-APPLY_DEFINES( NAME, FUNCTION );
-
-#endif // #ifndef OPENCLAM_CL_HPP_INCLUDED
+#endif // #ifndef OPENCLAM_KERNEL_HPP_INCLUDED
