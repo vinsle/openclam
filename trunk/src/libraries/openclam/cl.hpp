@@ -12,8 +12,7 @@
 #include <CL/cl.h>
 #include "error.hpp"
 #include "context.hpp"
-
-unsigned int get_global_id( unsigned int ){ return 0; }
+#include "builtin.hpp"
 
 #define __kernel
 #define kernel
@@ -21,13 +20,18 @@ unsigned int get_global_id( unsigned int ){ return 0; }
 #define __global
 #define global
 
-#define APPLY_DEFINES( SOURCES ) SOURCES;
+#define APPLY_DEFINES( NAME, SOURCES )      \
+class NAME_CLASS : public openclam::builtin \
+{                                           \
+private:                                    \
+             NAME_CLASS() {}                \
+    virtual ~NAME_CLASS() {}                \
+                                            \
+    SOURCES;                                \
+};                                          \
 
-#define KERNEL( SOURCES )               \
-        #SOURCES;                       \
-        namespace                       \
-        {                               \
-            APPLY_DEFINES( SOURCES );   \
-        }
+#define KERNEL( NAME, SOURCES ) \
+#SOURCES;                       \
+APPLY_DEFINES( NAME, SOURCES );
 
 #endif // #ifndef OPENCLAM_CL_HPP_INCLUDED

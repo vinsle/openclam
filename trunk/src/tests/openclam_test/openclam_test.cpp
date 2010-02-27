@@ -14,14 +14,14 @@ namespace
 {
     const float added = 3.f;
 
-    const char * addKernel = KERNEL(
+    const char * addKernel = KERNEL( VectorAdd,
         __kernel void VectorAdd( __global const float* a, __global const float* b, __global float* c, unsigned int size )
-    {
-        const unsigned int iGID = get_global_id( 0 );
-        if( iGID >= size )
-            return;
-        c[ iGID ] = a[ iGID ] + b[ iGID ];
-    } );
+        {
+            const unsigned int iGID = get_global_id( 0 );
+            if( iGID >= size )
+                return;
+            c[ iGID ] = a[ iGID ] + b[ iGID ];
+        } );
 
     unsigned int RoundUp( unsigned int group_size, unsigned int global_size ) 
     {
