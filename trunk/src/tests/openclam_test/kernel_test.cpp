@@ -8,23 +8,59 @@
 
 #include "test.h"
 #include "openclam/cl.hpp"
-#include <memory>
 
-BOOST_AUTO_TEST_CASE( simple_kernel_instanciation )
+BOOST_AUTO_TEST_CASE( kernel_keyword_substitution_test )
 {
     const std::string expected =
-        "__kernel void MyKernel( __global const float* a, global unsigned int size ) "
+        "kernel void MyKernel() "
         "{ "
-        "const unsigned int id = get_global_id( 0 ); "
-        "a[ id ]; "
-        "size; "
         "}";
     const std::string actual = KERNEL( MyKernel,
-        __kernel void MyKernel( __global const float* a, global unsigned int size )
+        kernel void MyKernel()
         {
-            const unsigned int id = get_global_id( 0 );
-            a[ id ];
-            size;
+        } );
+    BOOST_CHECK_EQUAL( actual, expected );
+}
+
+BOOST_AUTO_TEST_CASE( __kernel_keyword_substitution_test )
+{
+    const std::string expected =
+        "__kernel void MyKernel() "
+        "{ "
+        "}";
+    const std::string actual = KERNEL( MyKernel,
+        __kernel void MyKernel()
+        {
+        } );
+    BOOST_CHECK_EQUAL( actual, expected );
+}
+
+BOOST_AUTO_TEST_CASE( global_keyword_substitution_test )
+{
+    const std::string expected =
+        "__kernel void MyKernel( global const float* a ) "
+        "{ "
+        "a; "
+        "}";
+    const std::string actual = KERNEL( MyKernel,
+        __kernel void MyKernel( global const float* a )
+        {
+            a;
+        } );
+    BOOST_CHECK_EQUAL( actual, expected );
+}
+
+BOOST_AUTO_TEST_CASE( __global_keyword_substitution_test )
+{
+    const std::string expected =
+        "__kernel void MyKernel( __global const float* a ) "
+        "{ "
+        "a; "
+        "}";
+    const std::string actual = KERNEL( MyKernel,
+        __kernel void MyKernel( __global const float* a )
+        {
+            a;
         } );
     BOOST_CHECK_EQUAL( actual, expected );
 }
