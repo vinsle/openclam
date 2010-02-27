@@ -189,7 +189,15 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx;h;hpp;hxx;hm;inl;inc;xsd"
 			>
 			<File
+				RelativePath="..\..\src\tests\openclam_test\context_test.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\tests\openclam_test\openclam_test.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\tests\openclam_test\test.cpp"
 				>
 			</File>
 			<File
