@@ -14,26 +14,28 @@
 namespace openclam
 {
 
-    enum DeviceType
-    {
-        Default     = CL_DEVICE_TYPE_DEFAULT,
-        Cpu         = CL_DEVICE_TYPE_CPU,
-        Gpu         = CL_DEVICE_TYPE_GPU,
-        Accelerator = CL_DEVICE_TYPE_ACCELERATOR,
-        All         = CL_DEVICE_TYPE_ALL
-    };
+enum DeviceType
+{
+    Default     = CL_DEVICE_TYPE_DEFAULT,
+    Cpu         = CL_DEVICE_TYPE_CPU,
+    Gpu         = CL_DEVICE_TYPE_GPU,
+    Accelerator = CL_DEVICE_TYPE_ACCELERATOR,
+    All         = CL_DEVICE_TYPE_ALL
+};
 
-    class Context : private boost::noncopyable
+class Context : private boost::noncopyable
+{
+public:
+    explicit Context( DeviceType type = Default )
+        : type_( type )
     {
-    public:
-        explicit Context( DeviceType type = Default )
-            : type_( type )
-        {
-            ERROR_HANDLER( clContext_ = clCreateContextFromType( 0, type_, NULL, NULL, &error ); )
-        }
-    private:
-        const DeviceType type_;
-        cl_context clContext_;
+        ERROR_HANDLER( clContext_ = clCreateContextFromType( 0, type_, NULL, NULL, &error ); )
+    }
+    virtual ~Context() {}
+
+private:
+    const DeviceType type_;
+    cl_context clContext_;
 };
 
 }
