@@ -20,18 +20,18 @@
 #define __global
 #define global
 
-#define APPLY_DEFINES( NAME, SOURCES )      \
+#define APPLY_DEFINES( NAME, FUNCTION )     \
 class NAME_CLASS : public openclam::builtin \
 {                                           \
 private:                                    \
              NAME_CLASS() {}                \
     virtual ~NAME_CLASS() {}                \
                                             \
-    SOURCES;                                \
+    FUNCTION;                               \
 };                                          \
 
-#define KERNEL( NAME, SOURCES ) \
-#SOURCES;                       \
-APPLY_DEFINES( NAME, SOURCES );
+#define KERNEL( NAME, FUNCTION ) \
+#FUNCTION;                       \
+APPLY_DEFINES( NAME, FUNCTION );
 
 #endif // #ifndef OPENCLAM_CL_HPP_INCLUDED
