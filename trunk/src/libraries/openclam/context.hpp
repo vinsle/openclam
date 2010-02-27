@@ -23,15 +23,15 @@ enum DeviceType
     All         = CL_DEVICE_TYPE_ALL
 };
 
-class Context : private boost::noncopyable
+class context : private boost::noncopyable
 {
 public:
-    explicit Context( DeviceType type = Default )
+    explicit context( DeviceType type = Default )
         : type_( type )
     {
         ERROR_HANDLER( clContext_ = clCreateContextFromType( 0, type_, NULL, NULL, &error ); )
     }
-    virtual ~Context() {}
+    virtual ~context() {}
 
 private:
     const DeviceType type_;

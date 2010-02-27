@@ -10,8 +10,8 @@
 #define OPENCLAM_CL_HPP_INCLUDED
 
 #include <CL/cl.h>
-#include "Error.hpp"
-#include "Context.hpp"
+#include "error.hpp"
+#include "context.hpp"
 
 unsigned int get_global_id( unsigned int ){ return 0; }
 
