@@ -29,7 +29,7 @@ public:
     explicit context( device_type type = default )
         : type_( type )
     {
-        ERROR_HANDLER( clContext_ = clCreateContextFromType( 0, type_, NULL, NULL, &error ); )
+        ERROR_HANDLER( clContext_ = clCreateContextFromType( 0, type_, NULL, NULL, &ERROR ) );
     }
     virtual ~context() {}
 

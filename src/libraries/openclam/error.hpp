@@ -16,10 +16,10 @@
 
 #define ERROR_HANDLER( CODE )   \
 {                               \
-    cl_int error;               \
-    CODE                        \
-    if( error != CL_SUCCESS )   \
-        throw std::runtime_error( "Openclam error '" + boost::lexical_cast< std::string >( error ) + "' at : '" + #CODE ); \
+    cl_int ERROR;               \
+    CODE;                        \
+    if( ERROR != CL_SUCCESS )   \
+        throw std::runtime_error( "Openclam error '" + boost::lexical_cast< std::string >( ERROR ) + "' at : '" + #CODE ); \
 }
 
 #endif // #ifndef OPENCLAM_ERROR_HPP_INCLUDED
