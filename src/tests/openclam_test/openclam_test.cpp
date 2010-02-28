@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE( setting_up_openclam_framework )
     // Create the OpenCL context on a GPU device
     cl_int error;
     cl_context cxGPUContext = clCreateContextFromType( 0, CL_DEVICE_TYPE_GPU, NULL, NULL, &error );
-    openclam::context context( openclam::Gpu );
+    openclam::context context( openclam::context::gpu );
     
     // Get the list of GPU devices associated with context
     unsigned int deviceSize;
