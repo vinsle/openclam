@@ -17,58 +17,45 @@
 //    const std::string __global = "";
 //}
 
-BOOST_AUTO_TEST_CASE( kernel_keyword_substitution_test )
+namespace
 {
-    const std::string expected =
-        "kernel void MyKernel() "
-        "{ "
-        "}";
-    const std::string actual = KERNEL( MyKernel,
+    class fixture
+    {
+    public:
+        openclam::context context;
+    };
+}
+
+BOOST_FIXTURE_TEST_CASE( kernel_keyword_substitution_test, fixture )
+{
+    KERNEL( MyKernel, context,
         kernel void MyKernel()
         {
         } );
-    BOOST_CHECK_EQUAL( actual, expected );
 }
 
-BOOST_AUTO_TEST_CASE( __kernel_keyword_substitution_test )
+BOOST_FIXTURE_TEST_CASE( __kernel_keyword_substitution_test, fixture )
 {
-    const std::string expected =
-        "__kernel void MyKernel() "
-        "{ "
-        "}";
-    const std::string actual = KERNEL( MyKernel,
+    KERNEL( MyKernel, context,
         __kernel void MyKernel()
         {
         } );
-    BOOST_CHECK_EQUAL( actual, expected );
 }
 
-BOOST_AUTO_TEST_CASE( global_keyword_substitution_test )
+BOOST_FIXTURE_TEST_CASE( global_keyword_substitution_test, fixture )
 {
-    const std::string expected =
-        "__kernel void MyKernel( global const float* a ) "
-        "{ "
-        "a; "
-        "}";
-    const std::string actual = KERNEL( MyKernel,
+    KERNEL( MyKernel, context,
         __kernel void MyKernel( global const float* a )
         {
             a;
         } );
-    BOOST_CHECK_EQUAL( actual, expected );
 }
 
-BOOST_AUTO_TEST_CASE( __global_keyword_substitution_test )
+BOOST_FIXTURE_TEST_CASE( __global_keyword_substitution_test, fixture )
 {
-    const std::string expected =
-        "__kernel void MyKernel( __global const float* a ) "
-        "{ "
-        "a; "
-        "}";
-    const std::string actual = KERNEL( MyKernel,
+    KERNEL( MyKernel, context,
         __kernel void MyKernel( __global const float* a )
         {
             a;
         } );
-    BOOST_CHECK_EQUAL( actual, expected );
 }

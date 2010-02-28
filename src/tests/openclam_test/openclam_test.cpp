@@ -14,15 +14,6 @@ namespace
 {
     const float added = 3.f;
 
-    const char * addKernel = KERNEL( VectorAdd,
-        __kernel void VectorAdd( __global const float* a, __global const float* b, __global float* c, unsigned int size )
-        {
-            const unsigned int iGID = get_global_id( 0 );
-            if( iGID >= size )
-                return;
-            c[ iGID ] = a[ iGID ] + b[ iGID ];
-        } );
-
     unsigned int RoundUp( unsigned int group_size, unsigned int global_size ) 
     {
         int r = global_size % group_size;
@@ -53,7 +44,6 @@ BOOST_AUTO_TEST_CASE( setting_up_openclam_framework )
     // Create the OpenCL context on a GPU device
     cl_int error;
     cl_context cxGPUContext = clCreateContextFromType( 0, CL_DEVICE_TYPE_GPU, NULL, NULL, &error );
-    openclam::context context( openclam::context::gpu );
     
     // Get the list of GPU devices associated with context
     unsigned int deviceSize;
@@ -61,12 +51,16 @@ BOOST_AUTO_TEST_CASE( setting_up_openclam_framework )
     std::auto_ptr< cl_device_id > cdDevices( new cl_device_id[ deviceSize ] );
     error |= clGetContextInfo( cxGPUContext, CL_CONTEXT_DEVICES, deviceSize, cdDevices.get(), NULL );
 
-    // Allocate the OpenCL buffer memory objects for source and result on the device GMEM
-    cl_mem cmDevSrcA = clCreateBuffer( cxGPUContext, CL_MEM_READ_ONLY, sizeof(cl_float) * globalSize, NULL, &error );
-    cl_mem cmDevSrcB = clCreateBuffer( cxGPUContext, CL_MEM_READ_ONLY, sizeof(cl_float) * globalSize, NULL, &error );
-    cl_mem cmDevDst = clCreateBuffer( cxGPUContext, CL_MEM_WRITE_ONLY, sizeof(cl_float) * globalSize, NULL, &error );
-
     // Create the program
+    const char * addKernel =
+    "    __kernel void VectorAdd( __global const float* a, __global const float* b, __global float* c, unsigned int size )"
+    "{"
+    "    const unsigned int iGID = get_global_id( 0 );"
+    "    if( iGID >= size )"
+    "        return;"
+    "    c[ iGID ] = a[ iGID ] + b[ iGID ];"
+    "}";
+
     const unsigned int szKernelLength = strlen( addKernel );
     cl_program cpProgram = clCreateProgramWithSource( cxGPUContext, 1, &addKernel, &szKernelLength, &error );
 
@@ -75,6 +69,11 @@ BOOST_AUTO_TEST_CASE( setting_up_openclam_framework )
 
     // Create the kernel
     cl_kernel ckKernel = clCreateKernel( cpProgram, "VectorAdd", &error );
+
+    // Allocate the OpenCL buffer memory objects for source and result on the device GMEM
+    cl_mem cmDevSrcA = clCreateBuffer( cxGPUContext, CL_MEM_READ_ONLY, sizeof(cl_float) * globalSize, NULL, &error );
+    cl_mem cmDevSrcB = clCreateBuffer( cxGPUContext, CL_MEM_READ_ONLY, sizeof(cl_float) * globalSize, NULL, &error );
+    cl_mem cmDevDst = clCreateBuffer( cxGPUContext, CL_MEM_WRITE_ONLY, sizeof(cl_float) * globalSize, NULL, &error );
 
     // Set the Argument values
     error = clSetKernelArg( ckKernel, 0, sizeof(cl_mem), &cmDevSrcA );
