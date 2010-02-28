@@ -9,7 +9,9 @@
 #ifndef OPENCLAM_CONTEXT_HPP_INCLUDED
 #define OPENCLAM_CONTEXT_HPP_INCLUDED
 
+#include "program.hpp"
 #include <memory>
+#include <string>
 #include <boost/noncopyable.hpp>
 
 namespace openclam
@@ -41,6 +43,14 @@ public:
         clReleaseContext( context_ ); // $$$$ 28-02-2010 SILVIN: check error code?
     }
 
+    std::auto_ptr< openclam::program > create( const std::string& sources ) const
+    {
+        const unsigned int size = sources.size();
+        const char* buffer = sources.c_str();
+        cl_program result;
+        ERROR_HANDLER( result = clCreateProgramWithSource( context_, 1, &buffer, &size, &ERROR ) );
+        return std::auto_ptr< openclam::program >( new openclam::program( result ) );
+    }
 private:
     cl_context context_;
     std::auto_ptr< cl_device_id > devices_;
