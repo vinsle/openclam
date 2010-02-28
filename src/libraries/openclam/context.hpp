@@ -32,6 +32,7 @@ public:
         ERROR_HANDLER( context_ = clCreateContextFromType( 0, type, NULL, NULL, &ERROR ) );
         unsigned int size;
         ERROR_HANDLER( ERROR = clGetContextInfo( context_, CL_CONTEXT_DEVICES, 0, NULL, &size ) );
+        ERROR_HANDLER( ERROR = size > 0 ? CL_SUCCESS : CL_DEVICE_NOT_AVAILABLE );
         devices_.reset( new cl_device_id[ size ] );
         ERROR_HANDLER( ERROR = clGetContextInfo( context_, CL_CONTEXT_DEVICES, size, devices_.get(), NULL ) );
     }
