@@ -9,6 +9,7 @@
 #ifndef OPENCLAM_CONTEXT_HPP_INCLUDED
 #define OPENCLAM_CONTEXT_HPP_INCLUDED
 
+#include <memory>
 #include <boost/noncopyable.hpp>
 
 namespace openclam
@@ -29,13 +30,18 @@ public:
     explicit context( device_type type = default )
         : type_( type )
     {
-        ERROR_HANDLER( clContext_ = clCreateContextFromType( 0, type_, NULL, NULL, &ERROR ) );
+        ERROR_HANDLER( context_ = clCreateContextFromType( 0, type_, NULL, NULL, &ERROR ) );
+        unsigned int size;
+        ERROR_HANDLER( ERROR = clGetContextInfo( context_, CL_CONTEXT_DEVICES, 0, NULL, &size ) );
+        devices_.reset( new cl_device_id[ size ] );
+        ERROR_HANDLER( ERROR = clGetContextInfo( context_, CL_CONTEXT_DEVICES, size, devices_.get(), NULL ) );
     }
     virtual ~context() {}
 
 private:
     const device_type type_;
-    cl_context clContext_;
+    cl_context context_;
+    std::auto_ptr< cl_device_id > devices_;
 };
 
 }
