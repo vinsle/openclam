@@ -173,6 +173,10 @@
 				RelativePath="..\..\src\libraries\openclam\kernel.hpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\src\libraries\openclam\program.hpp"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

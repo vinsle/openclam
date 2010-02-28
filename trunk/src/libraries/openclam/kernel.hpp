@@ -11,6 +11,8 @@
 
 #include "builtin.hpp"
 #include "context.hpp"
+#include "program.hpp"
+#include "error.hpp"
 #include <string>
 
 namespace openclam
@@ -19,15 +21,16 @@ class kernel_base : protected openclam::builtin
 {
 public:
              kernel_base( const std::string& name, const openclam::context& context, const std::string& sources )
-                : name_   ( name )
-                , context_( context )
-                , sources_( sources )
+                 : program_( context.create( sources ) )
+                 , kernel_ ( program_->create( name ) )
              {}
-    virtual ~kernel_base() {}
-protected:
-    const std::string name_;
-    const openclam::context& context_;
-    const std::string sources_;
+    virtual ~kernel_base()
+             {
+                 clReleaseKernel( kernel_ ); // $$$$ 28-02-2010 SILVIN: check error code?
+             }
+private:
+    std::auto_ptr< openclam::program > program_;
+    cl_kernel kernel_;
 };
 }
 
