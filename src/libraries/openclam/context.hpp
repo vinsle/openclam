@@ -36,7 +36,10 @@ public:
         devices_.reset( new cl_device_id[ size ] );
         ERROR_HANDLER( ERROR = clGetContextInfo( context_, CL_CONTEXT_DEVICES, size, devices_.get(), NULL ) );
     }
-    virtual ~context() {}
+    virtual ~context()
+    {
+        clReleaseContext( context_ ); // $$$$ 28-02-2010 SILVIN: check error code?
+    }
 
 private:
     cl_context context_;
