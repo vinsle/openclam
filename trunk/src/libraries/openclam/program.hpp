@@ -9,6 +9,7 @@
 #ifndef OPENCLAM_PROGRAM_HPP_INCLUDED
 #define OPENCLAM_PROGRAM_HPP_INCLUDED
 
+#include "error.hpp"
 #include <memory>
 #include <string>
 #include <boost/noncopyable.hpp>

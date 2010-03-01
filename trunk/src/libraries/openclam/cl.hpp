@@ -10,7 +10,6 @@
 #define OPENCLAM_CL_HPP_INCLUDED
 
 #include <CL/cl.h>
-#include "error.hpp"
 #include "context.hpp"
 #include "kernel.hpp"
 
