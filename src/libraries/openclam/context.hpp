@@ -9,6 +9,7 @@
 #ifndef OPENCLAM_CONTEXT_HPP_INCLUDED
 #define OPENCLAM_CONTEXT_HPP_INCLUDED
 
+#include "error.hpp"
 #include "program.hpp"
 #include <memory>
 #include <string>
