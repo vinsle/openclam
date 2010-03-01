@@ -31,6 +31,7 @@ BOOST_FIXTURE_TEST_CASE( kernel_keyword_substitution_test, fixture )
     KERNEL( MyKernel, context,
         kernel void MyKernel( global const float* a )
         {
+            a;
         } );
 }
 
@@ -39,6 +40,7 @@ BOOST_FIXTURE_TEST_CASE( __kernel_keyword_substitution_test, fixture )
     KERNEL( MyKernel, context,
         __kernel void MyKernel( global const float* a )
         {
+            a;
         } );
 }
 
