@@ -1,0 +1,36 @@
+#summary One-sentence summary of this page.
+
+= Current version =
+ * Compile an OpenCL Program
+  * Finish to add C99 extensions (__local, ...)
+  * Add attribute qualifiers (binded to empty string for compilation)
+  * OpenCL Preprocessor directives
+  * Buitin types (scalar types like float4)
+  * Conversions and type casting
+  * Mock all the builtin functions
+   * Work-item functions
+   * Math functions
+   * Integer functions
+   * Common functions
+   * Geometric functions
+   * Relational Functions
+   * Vector data load and store functions
+   * Image read and write functions
+   * Synchronizations functions
+   * Explicit memory fence functions
+   * Async copies from Global to Local Memory, Local to Global Memoryn abd Prefetch
+ * Better error handling
+ * User can use its STL containers with openclam algorithms
+  * openclam::for_each
+  * openclam::reduce
+  * kernels are unary or binary functions?
+ * Packaging
+  * Release version 1.0
+  * Add documentation (examples, API)
+  * Tests on different plateforms (ATI vs NVIDIA) + different drivers
+
+= Future versions =
+ * Use TBB as alternative CPU implementation (if neither CPU nor GPU devices or plateforms are present)
+  * implement all the builtin functions (with boost::math?)
+ * Use STL algorithms if TBB is disabled
+ * Add Image type support
