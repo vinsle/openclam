@@ -1,5 +1,3 @@
-#summary One-sentence summary of this page.
-
 = Current version =
  * Compile an OpenCL Program
   * Finish to add C99 extensions (__local, ...)
