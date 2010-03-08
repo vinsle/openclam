@@ -30,6 +30,7 @@
   * Release version 1.0
   * Add documentation (examples, API)
   * Tests on different platforms (ATI vs NVIDIA) + different drivers
+  * Add a default context inside global scope and a default kernel construction?
 
 = Future versions =
  * Use TBB as alternative CPU implementation (if neither CPU nor GPU devices or plateforms are present)
