@@ -41,3 +41,4 @@
  * Add better/simplified devices choice (best device, all devices, ...)
  * Choose automatically best work group size
  * User can specify its build options
+ * save kernel binaries to speed up initialization time
