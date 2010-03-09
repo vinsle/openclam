@@ -3,7 +3,7 @@
  * [http://www.khronos.org/registry/cl/specs/opencl-1.0.48.pdf Specifications]
  * [http://www.khronos.org/registry/cl/ OpenCL headers]
  * [http://www.khronos.org/registry/cl/api/1.0/cl.hpp OpenCL C++ wrapper]
-  * with its[http://www.khronos.org/registry/cl/api/1.0/cl.hpp-docs.zip documentation]
+  * with its [http://www.khronos.org/registry/cl/api/1.0/cl.hpp-docs.zip documentation]
  * [http://www.khronos.org/files/opencl-quick-reference-card.pdf Quick reference card]
  * [http://www.khronos.org/opencl/sdk/1.0/docs/man/xhtml/ Online man page]
 
