@@ -170,6 +170,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\libraries\openclam\for_each.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\libraries\openclam\kernel.hpp"
 				>
 			</File>

@@ -197,6 +197,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\tests\openclam_test\foreach_test.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\tests\openclam_test\kernel_test.cpp"
 				>
 			</File>
