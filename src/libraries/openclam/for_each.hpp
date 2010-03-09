@@ -14,8 +14,8 @@
 
 namespace openclam
 {
-    template< typename T, class InputIterator >
-    void for_each( InputIterator first, InputIterator last, openclam::kernel_base& k )
+    template< typename T, class InputIterator, class Kernel >
+    void for_each( InputIterator first, InputIterator last, Kernel& k )
     {
         const unsigned int size = std::distance( first, last ); // $$$$ 2010-03-09 SILVIN: externalize these functions into openclam::buffer or vector object
         T* data = new T[ size ];

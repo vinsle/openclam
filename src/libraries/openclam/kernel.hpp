@@ -17,6 +17,7 @@
 
 namespace openclam
 {
+template< typename T >
 class kernel_base : protected openclam::builtin
 {
 public:
@@ -29,7 +30,6 @@ public:
              {
                  clReleaseKernel( kernel_ ); // $$$$ 28-02-2010 SILVIN: check error code?
              }
-    template< typename T >
     void operator()( T*& data, size_t size )
     {
         context_.execute( data, size, kernel_ );
@@ -47,19 +47,19 @@ private:
 #define __global
 #define global
 
-#define APPLY_DEFINES( NAME, CONTEXT, FUNCTION, SOURCES )    \
-class NAME##_CLASS : public openclam::kernel_base            \
-{                                                            \
-public:                                                      \
-    explicit NAME##_CLASS( const openclam::context& CONTEXT )\
-    : openclam::kernel_base( #NAME, CONTEXT, SOURCES )       \
-             {}                                              \
-    virtual ~NAME##_CLASS() {}                               \
-private:                                                     \
-    FUNCTION;                                                \
-} NAME( CONTEXT );
+#define APPLY_DEFINES( NAME, CONTEXT, TYPE, FUNCTION, SOURCES )     \
+class NAME##_CLASS : public openclam::kernel_base< TYPE >           \
+{                                                                   \
+public:                                                             \
+    explicit NAME##_CLASS( const openclam::context& CONTEXT )       \
+    : openclam::kernel_base< TYPE >( #NAME, CONTEXT, SOURCES ) {}   \
+    virtual ~NAME##_CLASS() {}                                      \
+    void type_check( TYPE& data ){ NAME( &data ); }                 \
+private:                                                            \
+    FUNCTION;                                                       \
+} NAME( CONTEXT );TYPE NAME##_CLASS_TYPE_CHECK; NAME.type_check( NAME##_CLASS_TYPE_CHECK );
 
-#define KERNEL( NAME, CONTEXT, FUNCTION )            \
-APPLY_DEFINES( NAME, CONTEXT, FUNCTION, #FUNCTION );
+#define KERNEL( NAME, CONTEXT, TYPE, FUNCTION )            \
+APPLY_DEFINES( NAME, CONTEXT, TYPE, FUNCTION, #FUNCTION );
 
 #endif // #ifndef OPENCLAM_KERNEL_HPP_INCLUDED

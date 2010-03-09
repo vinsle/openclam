@@ -28,7 +28,7 @@ namespace
 
 BOOST_FIXTURE_TEST_CASE( kernel_keyword_substitution_test, fixture )
 {
-    KERNEL( MyKernel, context,
+    KERNEL( MyKernel, context, float,
         kernel void MyKernel( global const float* a )
         {
             a;
@@ -37,7 +37,7 @@ BOOST_FIXTURE_TEST_CASE( kernel_keyword_substitution_test, fixture )
 
 BOOST_FIXTURE_TEST_CASE( __kernel_keyword_substitution_test, fixture )
 {
-    KERNEL( MyKernel, context,
+    KERNEL( MyKernel, context, float,
         __kernel void MyKernel( global const float* a )
         {
             a;
@@ -46,7 +46,7 @@ BOOST_FIXTURE_TEST_CASE( __kernel_keyword_substitution_test, fixture )
 
 BOOST_FIXTURE_TEST_CASE( global_keyword_substitution_test, fixture )
 {
-    KERNEL( MyKernel, context,
+    KERNEL( MyKernel, context, float,
         __kernel void MyKernel( global const float* a )
         {
             a;
@@ -55,7 +55,7 @@ BOOST_FIXTURE_TEST_CASE( global_keyword_substitution_test, fixture )
 
 BOOST_FIXTURE_TEST_CASE( __global_keyword_substitution_test, fixture )
 {
-    KERNEL( MyKernel, context,
+    KERNEL( MyKernel, context, float,
         __kernel void MyKernel( __global const float* a )
         {
             a;
