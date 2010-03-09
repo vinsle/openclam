@@ -3,6 +3,7 @@
   * Finish to add C99 extensions (__local, ...)
   * Add attribute qualifiers (binded to empty string for compilation)
   * Non-kernel functions can be called inside kernel
+  * Struct and typedef
   * Check if "global" variables inside opencl program are valid
   * OpenCL Preprocessor directives
   * Buitin types (scalar types like float4)
