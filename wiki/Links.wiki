@@ -6,6 +6,8 @@
   * with its [http://www.khronos.org/registry/cl/api/1.0/cl.hpp-docs.zip documentation]
  * [http://www.khronos.org/files/opencl-quick-reference-card.pdf Quick reference card]
  * [http://www.khronos.org/opencl/sdk/1.0/docs/man/xhtml/ Online man page]
+ * [http://www.khronos.org/message_boards/viewforum.php?f=28&sid=eaa3b30faecad9f783ee1529368f4897 Forum]
+  * [http://www.khronos.org/message_boards/viewtopic.php?f=28&t=1415 C++ binding thread]
 
 = SDKs =
  * ATI
