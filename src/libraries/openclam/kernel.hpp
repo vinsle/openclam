@@ -14,6 +14,8 @@
 #include "program.hpp"
 #include "error.hpp"
 #include <string>
+#include <boost/function.hpp>
+#include <boost/bind.hpp>
 
 namespace openclam
 {
@@ -34,6 +36,8 @@ public:
     {
         context_.execute( data, size, kernel_ );
     }
+protected:
+    boost::function< void( T* ) > f_;
 private:
     const openclam::context& context_;
     std::auto_ptr< openclam::program > program_;
@@ -53,7 +57,10 @@ class NAME##_CLASS : public openclam::kernel_base< TYPE >                   \
 public:                                                                     \
     explicit NAME##_CLASS( const openclam::context& CONTEXT )               \
                 : openclam::kernel_base< TYPE >( #NAME, CONTEXT, SOURCES )  \
-            { type_check(); }                                               \
+             {                                                              \
+                type_check();                                               \
+                f_ = boost::bind( &NAME##_CLASS::##NAME, this, _1 );        \
+             }                                                              \
     virtual ~NAME##_CLASS() {}                                              \
 private:                                                                    \
     void type_check(){ TYPE data; NAME( &data ); }                          \
