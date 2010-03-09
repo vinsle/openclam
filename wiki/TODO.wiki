@@ -42,3 +42,5 @@
  * Choose automatically best work group size
  * User can specify its build options
  * Save kernel binaries to speed up initialization time (proxy)
+ * Add CUDA_KERNEL to ease CUDA -> OpenCL transition
+ * Expose openclam buffer and matrix operators
