@@ -47,17 +47,18 @@ private:
 #define __global
 #define global
 
-#define APPLY_DEFINES( NAME, CONTEXT, TYPE, FUNCTION, SOURCES )     \
-class NAME##_CLASS : public openclam::kernel_base< TYPE >           \
-{                                                                   \
-public:                                                             \
-    explicit NAME##_CLASS( const openclam::context& CONTEXT )       \
-    : openclam::kernel_base< TYPE >( #NAME, CONTEXT, SOURCES ) {}   \
-    virtual ~NAME##_CLASS() {}                                      \
-    void type_check( TYPE& data ){ NAME( &data ); }                 \
-private:                                                            \
-    FUNCTION;                                                       \
-} NAME( CONTEXT );TYPE NAME##_CLASS_TYPE_CHECK; NAME.type_check( NAME##_CLASS_TYPE_CHECK );
+#define APPLY_DEFINES( NAME, CONTEXT, TYPE, FUNCTION, SOURCES )             \
+class NAME##_CLASS : public openclam::kernel_base< TYPE >                   \
+{                                                                           \
+public:                                                                     \
+    explicit NAME##_CLASS( const openclam::context& CONTEXT )               \
+                : openclam::kernel_base< TYPE >( #NAME, CONTEXT, SOURCES )  \
+            { type_check(); }                                               \
+    virtual ~NAME##_CLASS() {}                                              \
+private:                                                                    \
+    void type_check(){ TYPE data; NAME( &data ); }                          \
+    FUNCTION;                                                               \
+} NAME( CONTEXT );
 
 #define KERNEL( NAME, CONTEXT, TYPE, FUNCTION )            \
 APPLY_DEFINES( NAME, CONTEXT, TYPE, FUNCTION, #FUNCTION );
