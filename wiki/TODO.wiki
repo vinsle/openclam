@@ -29,6 +29,8 @@
   * kernels are unary or binary functions?
  * Add profiling support
  * Add objects queries support (program, context, kernel, ...)
+ * Expose kernel build log
+ * Let the user to write its own Kernel without KERNEL macro (constructed with a const std::string&)
  * Packaging
   * Release version 1.0
   * Add documentation (examples, API)
