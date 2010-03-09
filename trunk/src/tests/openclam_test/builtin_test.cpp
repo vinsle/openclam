@@ -12,7 +12,7 @@
 BOOST_AUTO_TEST_CASE( get_global_id_can_be_called_inside_code_part )
 {
     openclam::context context;
-    KERNEL( MyKernel, context,
+    KERNEL( MyKernel, context, float,
         __kernel void MyKernel( global const float* a )
         {
             get_global_id( 0 );

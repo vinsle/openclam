@@ -15,12 +15,12 @@ BOOST_AUTO_TEST_CASE( simple_for_each_with_unary_function )
 {
     std::vector< unsigned int > actual = boost::assign::list_of( 1 ).repeat( 9, 1 );
     openclam::context context;
-    KERNEL( Unary, context,
+    KERNEL( Unary, context, unsigned int,
         kernel void Unary( __global unsigned int* a )
         {
             a[ get_global_id( 0 ) ] += 3;
         } );
-    openclam::for_each< unsigned int >( actual.begin(), actual.end(), Unary );
+    openclam::for_each< unsigned int >( actual.begin(), actual.end(), Unary ); // SILVIN: deduce template?
     const std::vector< unsigned int > expected = boost::assign::list_of( 4 ).repeat( 9, 4 );
     BOOST_CHECK( actual == expected );
 }
