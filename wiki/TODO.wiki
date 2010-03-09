@@ -1,3 +1,4 @@
+#labels Featured,Phase-Requirements
 = Current version =
  * Compile an OpenCL Program
   * Finish to add C99 extensions (__local, ...)
