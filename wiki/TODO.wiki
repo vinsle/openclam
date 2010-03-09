@@ -8,6 +8,7 @@
   * OpenCL Preprocessor directives
   * Buitin types (scalar types like float4)
   * Conversions and type casting
+  * Image access qualifiers (read_only, write_only)
   * Mock all the builtin functions
    * Work-item functions
    * Math functions
