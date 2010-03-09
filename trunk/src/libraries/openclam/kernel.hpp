@@ -21,14 +21,21 @@ class kernel_base : protected openclam::builtin
 {
 public:
              kernel_base( const std::string& name, const openclam::context& context, const std::string& sources )
-                 : program_( context.create( sources ) )
+                 : context_( context )
+                 , program_( context_.create( sources ) )
                  , kernel_ ( program_->create( name ) )
              {}
     virtual ~kernel_base()
              {
                  clReleaseKernel( kernel_ ); // $$$$ 28-02-2010 SILVIN: check error code?
              }
+    template< typename T >
+    void operator()( T*& data, size_t size )
+    {
+        context_.execute( data, size, kernel_ );
+    }
 private:
+    const openclam::context& context_;
     std::auto_ptr< openclam::program > program_;
     cl_kernel kernel_;
 };

@@ -38,9 +38,11 @@ public:
         ERROR_HANDLER( ERROR = size > 0 ? CL_SUCCESS : CL_DEVICE_NOT_AVAILABLE );
         devices_.reset( new cl_device_id[ size ] );
         ERROR_HANDLER( ERROR = clGetContextInfo( context_, CL_CONTEXT_DEVICES, size, devices_.get(), NULL ) );
+        ERROR_HANDLER( queue_ = clCreateCommandQueue( context_, devices_.get()[ 0 ], 0, &ERROR ) ); // $$$$ 2010-03-09 SILVIN: harcoded on first device
     }
     virtual ~context()
     {
+        clReleaseCommandQueue( queue_ );
         clReleaseContext( context_ ); // $$$$ 28-02-2010 SILVIN: check error code?
     }
 
@@ -52,8 +54,22 @@ public:
         ERROR_HANDLER( result = clCreateProgramWithSource( context_, 1, &buffer, &size, &ERROR ) );
         return std::auto_ptr< openclam::program >( new openclam::program( result ) );
     }
+
+    template< typename T >
+    void execute( T* data, size_t size, cl_kernel k ) const
+    {
+        cl_mem arg;
+        ERROR_HANDLER( arg = clCreateBuffer( context_, CL_MEM_READ_WRITE, sizeof( T ) * size, NULL, &ERROR ) );
+        ERROR_HANDLER( ERROR = clSetKernelArg( k, 0, sizeof( cl_mem ), &arg ) );
+        ERROR_HANDLER( ERROR = clEnqueueWriteBuffer( queue_, arg, CL_TRUE, 0, sizeof( T ) * size, data, 0, NULL, NULL ) );
+        ERROR_HANDLER( ERROR = clEnqueueNDRangeKernel( queue_, k, 1, NULL, &size, NULL, 0, NULL, NULL ) );
+        ERROR_HANDLER( ERROR = clEnqueueReadBuffer( queue_, arg, CL_TRUE, 0, sizeof( T ) * size, data, 0, NULL, NULL ) );
+        ERROR_HANDLER( ERROR = clReleaseMemObject( arg ) );
+        // flush queue?
+    }
 private:
     cl_context context_;
+    cl_command_queue queue_;
     std::auto_ptr< cl_device_id > devices_;
 };
 
