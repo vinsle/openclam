@@ -32,7 +32,7 @@ public:
              {
                  clReleaseKernel( kernel_ ); // $$$$ 28-02-2010 SILVIN: check error code?
              }
-    void operator()( T*& data, size_t size )
+    void operator()( T* data, size_t size )
     {
         context_.execute( data, size, kernel_ );
     }
