@@ -20,7 +20,7 @@ BOOST_AUTO_TEST_CASE( simple_for_each_with_unary_function )
         {
             a[ get_global_id( 0 ) ] += 3;
         } );
-    openclam::for_each< unsigned int >( actual.begin(), actual.end(), Unary ); // SILVIN: deduce template?
+    openclam::for_each( actual.begin(), actual.end(), Unary );
     const std::vector< unsigned int > expected = boost::assign::list_of( 4 ).repeat( 9, 4 );
     BOOST_CHECK( actual == expected );
 }
