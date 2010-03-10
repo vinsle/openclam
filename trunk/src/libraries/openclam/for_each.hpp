@@ -17,14 +17,10 @@ namespace openclam
     template< class InputIterator, class Kernel >
     void for_each( InputIterator first, InputIterator last, Kernel& k )
     {
-        const unsigned int size = std::distance( first, last ); // $$$$ 2010-03-09 SILVIN: externalize these functions into openclam::buffer or vector object
-        std::auto_ptr< InputIterator::value_type > data( new InputIterator::value_type[ size ] );
-        InputIterator it = first;
-        for( unsigned int i = 0; it != last; ++it, ++i )
-            data.get()[ i ] = *it;
-        k( data.get(), size );
-        for( unsigned int i = 0; first != last; ++first, ++i )
-            std::swap( *first, data.get()[ i ] );
+        std::vector< InputIterator::value_type* > data;
+        for( ; first != last; ++first )
+            data.push_back( &*first );
+        k( data[ 0 ], data.size() );
     }
 }
 
