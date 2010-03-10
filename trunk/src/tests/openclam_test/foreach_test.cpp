@@ -24,3 +24,17 @@ BOOST_AUTO_TEST_CASE( simple_for_each_with_unary_function )
     const std::vector< unsigned int > expected = boost::assign::list_of( 4 ).repeat( 9, 4 );
     BOOST_CHECK( actual == expected );
 }
+
+BOOST_AUTO_TEST_CASE( use_of_stl_for_each )
+{
+    std::vector< unsigned int > actual = boost::assign::list_of( 1 ).repeat( 9, 1 );
+    openclam::context context;
+    KERNEL( Unary, context, unsigned int,
+        kernel void Unary( __global unsigned int* a )
+        {
+            a[ get_global_id( 0 ) ] += 3;
+        } );
+    std::for_each( actual.begin(), actual.end(), openclam::unary_function< unsigned int, Unary_CLASS >( Unary ) );
+    const std::vector< unsigned int > expected = boost::assign::list_of( 4 ).repeat( 9, 4 );
+    BOOST_CHECK( actual == expected );
+}
