@@ -13,5 +13,6 @@
 #include "context.hpp"
 #include "kernel.hpp"
 #include "for_each.hpp"
+#include "unary_function.hpp"
 
 #endif // #ifndef OPENCLAM_KERNEL_HPP_INCLUDED
