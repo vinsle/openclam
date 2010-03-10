@@ -10,7 +10,6 @@
 #define OPENCLAM_FOR_EACH_HPP_INCLUDED
 
 #include "kernel.hpp"
-#include <iostream>
 
 namespace openclam
 {
