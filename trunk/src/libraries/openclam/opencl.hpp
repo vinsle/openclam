@@ -127,6 +127,28 @@ public:
         return ::clReleaseMemObject( memobj );
     }
 
+    virtual cl_int clBuildProgram( cl_program program,
+                                   cl_uint num_devices,
+                                   const cl_device_id* device_list,
+                                   const char* options, 
+                                   void ( *pfn_notify )( cl_program program, void* user_data ),
+                                   void* user_data ) const
+    {
+        return ::clBuildProgram( program, num_devices, device_list, options, pfn_notify, user_data );
+    }
+
+    virtual cl_int clReleaseProgram( cl_program program ) const
+    {
+        return ::clReleaseProgram( program );
+    }
+
+    virtual cl_kernel clCreateKernel( cl_program program,
+                                      const char* kernel_name,
+                                      cl_int* errcode_ret ) const
+    {
+        return ::clCreateKernel( program, kernel_name, errcode_ret );
+    }
+
 };
 
 }

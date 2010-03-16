@@ -54,7 +54,7 @@ public:
         const char* buffer = sources.c_str();
         cl_program result;
         ERROR_HANDLER( result = wrapper_.clCreateProgramWithSource( context_, 1, &buffer, &size, &ERROR ) );
-        return std::auto_ptr< openclam::program >( new openclam::program( result ) );
+        return std::auto_ptr< openclam::program >( new openclam::program( wrapper_, result ) );
     }
 
     template< typename T >

@@ -90,6 +90,19 @@ public:
                                         cl_event* event ) const = 0;
 
     virtual cl_int clReleaseMemObject( cl_mem memobj ) const = 0;
+
+    virtual cl_int clBuildProgram( cl_program program,
+                                   cl_uint num_devices,
+                                   const cl_device_id* device_list,
+                                   const char* options, 
+                                   void ( *pfn_notify )( cl_program program, void* user_data ),
+                                   void* user_data ) const = 0;
+
+    virtual cl_int clReleaseProgram( cl_program program ) const = 0;
+
+    virtual cl_kernel clCreateKernel( cl_program program,
+                                      const char* kernel_name,
+                                      cl_int* errcode_ret ) const = 0;
 };
 
 }
