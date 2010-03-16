@@ -22,6 +22,10 @@ namespace
     class fixture
     {
     public:
+        fixture()
+            : context( wrapper )
+        {}
+        openclam::opencl wrapper;
         openclam::context context;
     };
 }

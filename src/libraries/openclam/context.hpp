@@ -11,6 +11,7 @@
 
 #include "error.hpp"
 #include "program.hpp"
+#include "iopencl.hpp"
 #include <memory>
 #include <string>
 #include <boost/noncopyable.hpp>
@@ -30,20 +31,21 @@ public:
         all         = CL_DEVICE_TYPE_ALL
     };
 
-    explicit context( device_type type = default )
+    context( const openclam::iopencl& wrapper, device_type type = default )
+        : wrapper_( wrapper )
     {
-        ERROR_HANDLER( context_ = clCreateContextFromType( 0, type, NULL, NULL, &ERROR ) );
+        ERROR_HANDLER( context_ = wrapper_.clCreateContextFromType( 0, type, NULL, NULL, &ERROR ) );
         unsigned int size;
-        ERROR_HANDLER( ERROR = clGetContextInfo( context_, CL_CONTEXT_DEVICES, 0, NULL, &size ) );
+        ERROR_HANDLER( ERROR = wrapper_.clGetContextInfo( context_, CL_CONTEXT_DEVICES, 0, NULL, &size ) );
         ERROR_HANDLER( ERROR = size > 0 ? CL_SUCCESS : CL_DEVICE_NOT_AVAILABLE );
         devices_.reset( new cl_device_id[ size ] );
-        ERROR_HANDLER( ERROR = clGetContextInfo( context_, CL_CONTEXT_DEVICES, size, devices_.get(), NULL ) );
-        ERROR_HANDLER( queue_ = clCreateCommandQueue( context_, devices_.get()[ 0 ], 0, &ERROR ) ); // $$$$ 2010-03-09 SILVIN: harcoded on first device
+        ERROR_HANDLER( ERROR = wrapper_.clGetContextInfo( context_, CL_CONTEXT_DEVICES, size, devices_.get(), NULL ) );
+        ERROR_HANDLER( queue_ = wrapper_.clCreateCommandQueue( context_, devices_.get()[ 0 ], 0, &ERROR ) ); // $$$$ 2010-03-09 SILVIN: harcoded on first device
     }
     virtual ~context()
     {
-        clReleaseCommandQueue( queue_ );
-        clReleaseContext( context_ ); // $$$$ 28-02-2010 SILVIN: check error code?
+        wrapper_.clReleaseCommandQueue( queue_ );
+        wrapper_.clReleaseContext( context_ ); // $$$$ 28-02-2010 SILVIN: check error code?
     }
 
     std::auto_ptr< openclam::program > create( const std::string& sources ) const
@@ -51,7 +53,7 @@ public:
         const unsigned int size = sources.size();
         const char* buffer = sources.c_str();
         cl_program result;
-        ERROR_HANDLER( result = clCreateProgramWithSource( context_, 1, &buffer, &size, &ERROR ) );
+        ERROR_HANDLER( result = wrapper_.clCreateProgramWithSource( context_, 1, &buffer, &size, &ERROR ) );
         return std::auto_ptr< openclam::program >( new openclam::program( result ) );
     }
 
@@ -59,15 +61,16 @@ public:
     void execute( T* data, size_t size, cl_kernel k ) const
     {
         cl_mem arg;
-        ERROR_HANDLER( arg = clCreateBuffer( context_, CL_MEM_READ_WRITE, sizeof( T ) * size, NULL, &ERROR ) );
-        ERROR_HANDLER( ERROR = clSetKernelArg( k, 0, sizeof( cl_mem ), &arg ) );
-        ERROR_HANDLER( ERROR = clEnqueueWriteBuffer( queue_, arg, CL_TRUE, 0, sizeof( T ) * size, data, 0, NULL, NULL ) );
-        ERROR_HANDLER( ERROR = clEnqueueNDRangeKernel( queue_, k, 1, NULL, &size, NULL, 0, NULL, NULL ) );
-        ERROR_HANDLER( ERROR = clEnqueueReadBuffer( queue_, arg, CL_TRUE, 0, sizeof( T ) * size, data, 0, NULL, NULL ) );
-        ERROR_HANDLER( ERROR = clReleaseMemObject( arg ) );
+        ERROR_HANDLER( arg = wrapper_.clCreateBuffer( context_, CL_MEM_READ_WRITE, sizeof( T ) * size, NULL, &ERROR ) );
+        ERROR_HANDLER( ERROR = wrapper_.clSetKernelArg( k, 0, sizeof( cl_mem ), &arg ) );
+        ERROR_HANDLER( ERROR = wrapper_.clEnqueueWriteBuffer( queue_, arg, CL_TRUE, 0, sizeof( T ) * size, data, 0, NULL, NULL ) );
+        ERROR_HANDLER( ERROR = wrapper_.clEnqueueNDRangeKernel( queue_, k, 1, NULL, &size, NULL, 0, NULL, NULL ) );
+        ERROR_HANDLER( ERROR = wrapper_.clEnqueueReadBuffer( queue_, arg, CL_TRUE, 0, sizeof( T ) * size, data, 0, NULL, NULL ) );
+        ERROR_HANDLER( ERROR = wrapper_.clReleaseMemObject( arg ) );
         // flush queue?
     }
 private:
+    const openclam::iopencl& wrapper_;
     cl_context context_;
     cl_command_queue queue_;
     std::auto_ptr< cl_device_id > devices_;
