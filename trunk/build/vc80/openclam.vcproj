@@ -174,7 +174,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\libraries\openclam\iopencl.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\libraries\openclam\kernel.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\libraries\openclam\opencl.hpp"
 				>
 			</File>
 			<File
