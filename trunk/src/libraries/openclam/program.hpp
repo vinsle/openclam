@@ -10,16 +10,16 @@
 #define OPENCLAM_PROGRAM_HPP_INCLUDED
 
 #include "error.hpp"
+#include "iprogram.hpp"
 #include "iopencl.hpp"
 #include "kernel_proxy.hpp"
 #include <memory>
 #include <string>
-#include <boost/noncopyable.hpp>
 
 namespace openclam
 {
 
-class program : private boost::noncopyable
+class program : public openclam::iprogram
 {
 public:
     program( const openclam::iopencl& wrapper, cl_program program )
@@ -33,7 +33,7 @@ public:
         wrapper_.clReleaseProgram( program_ ); // $$$$ 28-02-2010 SILVIN: check error code?
     }
 
-    std::auto_ptr< openclam::kernel_proxy > create( const std::string& name ) const
+    virtual std::auto_ptr< openclam::kernel_proxy > create( const std::string& name ) const
     {       
         cl_kernel result;
         ERROR_HANDLER( result = wrapper_.clCreateKernel( program_, name.c_str(), &ERROR ) );
