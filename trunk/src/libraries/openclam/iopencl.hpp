@@ -103,6 +103,8 @@ public:
     virtual cl_kernel clCreateKernel( cl_program program,
                                       const char* kernel_name,
                                       cl_int* errcode_ret ) const = 0;
+    
+    virtual cl_int clReleaseKernel( cl_kernel clKernel ) const = 0;
 };
 
 }

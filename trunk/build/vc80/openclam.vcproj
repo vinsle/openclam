@@ -182,6 +182,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\libraries\openclam\kernel_proxy.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\libraries\openclam\opencl.hpp"
 				>
 			</File>

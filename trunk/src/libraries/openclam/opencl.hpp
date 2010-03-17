@@ -149,6 +149,11 @@ public:
         return ::clCreateKernel( program, kernel_name, errcode_ret );
     }
 
+    virtual cl_int clReleaseKernel( cl_kernel clKernel ) const
+    {
+        return ::clReleaseKernel( clKernel );
+    }
+
 };
 
 }

@@ -58,16 +58,9 @@ public:
     }
 
     template< typename T >
-    void execute( T* data, size_t size, cl_kernel k ) const
+    void execute( T* data, size_t size, openclam::kernel_proxy& k ) const
     {
-        cl_mem arg;
-        ERROR_HANDLER( arg = wrapper_.clCreateBuffer( context_, CL_MEM_READ_WRITE, sizeof( T ) * size, NULL, &ERROR ) );
-        ERROR_HANDLER( ERROR = wrapper_.clSetKernelArg( k, 0, sizeof( cl_mem ), &arg ) );
-        ERROR_HANDLER( ERROR = wrapper_.clEnqueueWriteBuffer( queue_, arg, CL_TRUE, 0, sizeof( T ) * size, data, 0, NULL, NULL ) );
-        ERROR_HANDLER( ERROR = wrapper_.clEnqueueNDRangeKernel( queue_, k, 1, NULL, &size, NULL, 0, NULL, NULL ) );
-        ERROR_HANDLER( ERROR = wrapper_.clEnqueueReadBuffer( queue_, arg, CL_TRUE, 0, sizeof( T ) * size, data, 0, NULL, NULL ) );
-        ERROR_HANDLER( ERROR = wrapper_.clReleaseMemObject( arg ) );
-        // flush queue?
+        k.execute( data, size, context_, queue_ );
     }
 private:
     const openclam::iopencl& wrapper_;
