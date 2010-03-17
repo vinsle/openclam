@@ -193,10 +193,6 @@
 				RelativePath="..\..\src\libraries\openclam\program.hpp"
 				>
 			</File>
-			<File
-				RelativePath="..\..\src\libraries\openclam\unary_function.hpp"
-				>
-			</File>
 		</Filter>
 	</Files>
 	<Globals>
