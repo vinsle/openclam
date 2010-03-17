@@ -23,12 +23,17 @@ public:
     {}
     virtual ~unary_function()
     {
-        if( kernel_ && !buffer_.empty() )
-            (*kernel_)( buffer_[ 0 ], buffer_.size() ); // kernel call can throw in destructor...
+        if( kernel_ && !data_.empty() )
+        {
+            (*kernel_)( &data_[ 0 ], data_.size() ); // kernel call can throw in destructor...
+            for( unsigned int i = 0; i < data_.size(); ++i )
+                *data_references_[ i ] = data_[ i ];
+        }
     }
     void operator()( T& value )
     {
-        buffer_.push_back( &value );
+        data_.push_back( value );
+        data_references_.push_back( &value );
     }
     unary_function( const unary_function& )
         : kernel_( 0 )
@@ -37,7 +42,8 @@ public:
     }
 private:
     Kernel* kernel_;
-    std::vector< T* > buffer_;
+    std::vector< T > data_;
+    std::vector< T* > data_references_;
 };
 
 }
