@@ -23,25 +23,27 @@ template< typename T >
 class kernel_base : protected openclam::builtin
 {
 public:
-             kernel_base( const std::string& name, const openclam::context& context, const std::string& sources )
-                 : context_( context )
-                 , program_( context_.create( sources ) )
-                 , kernel_ ( program_->create( name ) )
-             {}
+    kernel_base( const std::string& name, const openclam::context& context, const std::string& sources )
+        : context_( context )
+        , program_( context_.create( sources ) )
+        , kernel_ ( program_->create( name ) )
+    {
+        // NOTHING
+    }
     virtual ~kernel_base()
-             {
-                 clReleaseKernel( kernel_ ); // $$$$ 28-02-2010 SILVIN: check error code?
-             }
+    {
+        // NOTHING
+    }
     void operator()( T* data, size_t size )
     {
-        context_.execute( data, size, kernel_ );
+        context_.execute( data, size, *kernel_ );
     }
 protected:
     boost::function< void( T* ) > f_;
 private:
     const openclam::context& context_;
     std::auto_ptr< openclam::program > program_;
-    cl_kernel kernel_;
+    std::auto_ptr< openclam::kernel_proxy > kernel_;
 };
 }
 
