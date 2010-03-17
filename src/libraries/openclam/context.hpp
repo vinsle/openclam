@@ -48,13 +48,13 @@ public:
         wrapper_.clReleaseContext( context_ ); // $$$$ 28-02-2010 SILVIN: check error code?
     }
 
-    std::auto_ptr< openclam::program > create( const std::string& sources ) const
+    std::auto_ptr< openclam::iprogram > create( const std::string& sources ) const
     {
         const unsigned int size = sources.size();
         const char* buffer = sources.c_str();
         cl_program result;
         ERROR_HANDLER( result = wrapper_.clCreateProgramWithSource( context_, 1, &buffer, &size, &ERROR ) );
-        return std::auto_ptr< openclam::program >( new openclam::program( wrapper_, result ) );
+        return std::auto_ptr< openclam::iprogram >( new openclam::program( wrapper_, result ) );
     }
 
     template< typename T >

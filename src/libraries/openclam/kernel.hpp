@@ -11,7 +11,7 @@
 
 #include "builtin.hpp"
 #include "context.hpp"
-#include "program.hpp"
+#include "iprogram.hpp"
 #include "error.hpp"
 #include <string>
 #include <boost/function.hpp>
@@ -42,7 +42,7 @@ protected:
     boost::function< void( T* ) > f_;
 private:
     const openclam::context& context_;
-    std::auto_ptr< openclam::program > program_;
+    std::auto_ptr< openclam::iprogram > program_;
     std::auto_ptr< openclam::kernel_proxy > kernel_;
 };
 }
