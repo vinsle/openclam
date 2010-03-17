@@ -12,31 +12,40 @@
 #include <list>
 #include <boost/assign.hpp>
 
-BOOST_AUTO_TEST_CASE( for_each_with_unary_function_on_vector_data )
+namespace
 {
-    std::vector< unsigned int > actual = boost::assign::list_of( 1 ).repeat( 9, 1 );
-    openclam::opencl wrapper;
-    openclam::context context( wrapper );
+    class fixture
+    {
+    public:
+        fixture()
+            : context( wrapper )
+        {}
+        openclam::opencl wrapper;
+        openclam::context context;
+    };
+}
+
+BOOST_FIXTURE_TEST_CASE( for_each_with_unary_function_on_vector_data, fixture )
+{
     KERNEL( Unary, context, unsigned int,
         kernel void Unary( __global unsigned int* a )
         {
             a[ get_global_id( 0 ) ] += 3;
         } );
+    std::vector< unsigned int > actual = boost::assign::list_of( 1 ).repeat( 9, 1 );
     openclam::for_each( actual.begin(), actual.end(), Unary );
     const std::vector< unsigned int > expected = boost::assign::list_of( 4 ).repeat( 9, 4 );
     BOOST_CHECK( actual == expected );
 }
 
-BOOST_AUTO_TEST_CASE( for_each_with_unary_function_on_list_data )
+BOOST_FIXTURE_TEST_CASE( for_each_with_unary_function_on_list_data, fixture )
 {
-    std::list< unsigned int > actual = boost::assign::list_of( 1 ).repeat( 9, 1 );
-    openclam::opencl wrapper;
-    openclam::context context( wrapper );
     KERNEL( Unary, context, unsigned int,
         kernel void Unary( __global unsigned int* a )
         {
             a[ get_global_id( 0 ) ] += 3;
         } );
+    std::list< unsigned int > actual = boost::assign::list_of( 1 ).repeat( 9, 1 );
     openclam::for_each( actual.begin(), actual.end(), Unary );
     const std::list< unsigned int > expected = boost::assign::list_of( 4 ).repeat( 9, 4 );
     BOOST_CHECK( actual == expected );
