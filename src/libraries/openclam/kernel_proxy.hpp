@@ -28,15 +28,15 @@ public:
     {
         wrapper_.clReleaseKernel( kernel_ ); // $$$$ 28-02-2010 SILVIN: check error code?
     }
-    template< typename T >
-    void execute( T* data, size_t size, cl_context context, cl_command_queue queue ) const
+
+    void execute( void* data, size_t size, cl_context context, cl_command_queue queue ) const
     {
         cl_mem arg;
-        ERROR_HANDLER( arg = wrapper_.clCreateBuffer( context, CL_MEM_READ_WRITE, sizeof( T ) * size, NULL, &ERROR ) );
+        ERROR_HANDLER( arg = wrapper_.clCreateBuffer( context, CL_MEM_READ_WRITE, size, NULL, &ERROR ) );
         ERROR_HANDLER( ERROR = wrapper_.clSetKernelArg( kernel_, 0, sizeof( cl_mem ), &arg ) );
-        ERROR_HANDLER( ERROR = wrapper_.clEnqueueWriteBuffer( queue, arg, CL_TRUE, 0, sizeof( T ) * size, data, 0, NULL, NULL ) );
+        ERROR_HANDLER( ERROR = wrapper_.clEnqueueWriteBuffer( queue, arg, CL_TRUE, 0, size, data, 0, NULL, NULL ) );
         ERROR_HANDLER( ERROR = wrapper_.clEnqueueNDRangeKernel( queue, kernel_, 1, NULL, &size, NULL, 0, NULL, NULL ) );
-        ERROR_HANDLER( ERROR = wrapper_.clEnqueueReadBuffer( queue, arg, CL_TRUE, 0, sizeof( T ) * size, data, 0, NULL, NULL ) );
+        ERROR_HANDLER( ERROR = wrapper_.clEnqueueReadBuffer( queue, arg, CL_TRUE, 0, size, data, 0, NULL, NULL ) );
         ERROR_HANDLER( ERROR = wrapper_.clReleaseMemObject( arg ) );
     }
 

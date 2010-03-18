@@ -57,8 +57,7 @@ public:
         return std::auto_ptr< openclam::iprogram >( new openclam::program( wrapper_, result ) );
     }
 
-    template< typename T >
-    void execute( T* data, size_t size, openclam::kernel_proxy& k ) const
+    void execute( void* data, size_t size, openclam::kernel_proxy& k ) const
     {
         k.execute( data, size, context_, queue_ );
     }

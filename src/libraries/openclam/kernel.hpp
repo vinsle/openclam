@@ -36,7 +36,7 @@ public:
     }
     void operator()( T* data, size_t size )
     {
-        context_.execute( data, size, *kernel_ );
+        context_.execute( data, sizeof( T ) * size, *kernel_ );
     }
 protected:
     boost::function< void( T* ) > f_;
