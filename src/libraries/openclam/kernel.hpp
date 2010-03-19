@@ -10,7 +10,7 @@
 #define OPENCLAM_KERNEL_HPP_INCLUDED
 
 #include "builtin.hpp"
-#include "context.hpp"
+#include "icontext.hpp"
 #include "iprogram.hpp"
 #include "error.hpp"
 #include <string>
@@ -23,7 +23,7 @@ template< typename T >
 class kernel_base : protected openclam::builtin
 {
 public:
-    kernel_base( const std::string& name, const openclam::context& context, const std::string& sources )
+    kernel_base( const std::string& name, const openclam::icontext& context, const std::string& sources )
         : context_( context )
         , program_( context_.create( sources ) )
         , kernel_ ( program_->create( name ) )
@@ -41,7 +41,7 @@ public:
 protected:
     boost::function< void( T* ) > f_;
 private:
-    const openclam::context& context_;
+    const openclam::icontext& context_;
     std::auto_ptr< openclam::iprogram > program_;
     std::auto_ptr< openclam::kernel_proxy > kernel_;
 };
@@ -57,7 +57,7 @@ private:
 class NAME##_CLASS : public openclam::kernel_base< TYPE >                   \
 {                                                                           \
 public:                                                                     \
-    explicit NAME##_CLASS( const openclam::context& CONTEXT )               \
+    explicit NAME##_CLASS( const openclam::icontext& CONTEXT )              \
                 : openclam::kernel_base< TYPE >( #NAME, CONTEXT, SOURCES )  \
              {                                                              \
                 type_check();                                               \

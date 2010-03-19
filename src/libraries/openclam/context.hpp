@@ -10,8 +10,9 @@
 #define OPENCLAM_CONTEXT_HPP_INCLUDED
 
 #include "error.hpp"
-#include "program.hpp"
 #include "iopencl.hpp"
+#include "icontext.hpp"
+#include "program.hpp"
 #include <memory>
 #include <string>
 #include <boost/noncopyable.hpp>
@@ -19,7 +20,7 @@
 namespace openclam
 {
 
-class context : private boost::noncopyable
+class context : public openclam::icontext
 {
 public:
     enum device_type
@@ -48,7 +49,7 @@ public:
         wrapper_.clReleaseContext( context_ ); // $$$$ 28-02-2010 SILVIN: check error code?
     }
 
-    std::auto_ptr< openclam::iprogram > create( const std::string& sources ) const
+    virtual std::auto_ptr< openclam::iprogram > create( const std::string& sources ) const
     {
         const unsigned int size = sources.size();
         const char* buffer = sources.c_str();
@@ -57,7 +58,7 @@ public:
         return std::auto_ptr< openclam::iprogram >( new openclam::program( wrapper_, result ) );
     }
 
-    void execute( void* data, size_t size, openclam::kernel_proxy& k ) const
+    virtual void execute( void* data, size_t size, openclam::kernel_proxy& k ) const
     {
         k.execute( data, size, context_, queue_ );
     }
