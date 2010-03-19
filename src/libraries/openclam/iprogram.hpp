@@ -9,7 +9,7 @@
 #ifndef OPENCLAM_IPROGRAM_HPP_INCLUDED
 #define OPENCLAM_IPROGRAM_HPP_INCLUDED
 
-#include "kernel_proxy.hpp"
+#include "ikernel_proxy.hpp"
 #include <memory>
 #include <string>
 #include <boost/noncopyable.hpp>
@@ -23,7 +23,7 @@ public:
              iprogram() {}
     virtual ~iprogram() {}
 
-    virtual std::auto_ptr< openclam::kernel_proxy > create( const std::string& name ) const = 0;
+    virtual std::auto_ptr< openclam::ikernel_proxy > create( const std::string& name ) const = 0;
 };
 
 }

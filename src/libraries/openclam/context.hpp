@@ -13,9 +13,6 @@
 #include "iopencl.hpp"
 #include "icontext.hpp"
 #include "program.hpp"
-#include <memory>
-#include <string>
-#include <boost/noncopyable.hpp>
 
 namespace openclam
 {
@@ -58,9 +55,9 @@ public:
         return std::auto_ptr< openclam::iprogram >( new openclam::program( wrapper_, result ) );
     }
 
-    virtual void execute( void* data, size_t size, openclam::kernel_proxy& k ) const
+    virtual void execute( void* data, size_t size, const openclam::ikernel_proxy& proxy ) const
     {
-        k.execute( data, size, context_, queue_ );
+        proxy.execute( data, size, context_, queue_ );
     }
 private:
     const openclam::iopencl& wrapper_;

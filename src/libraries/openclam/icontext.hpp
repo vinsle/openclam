@@ -10,7 +10,7 @@
 #define OPENCLAM_ICONTEXT_HPP_INCLUDED
 
 #include "iprogram.hpp"
-#include "kernel_proxy.hpp"
+#include "ikernel_proxy.hpp"
 #include <memory>
 #include <string>
 #include <boost/noncopyable.hpp>
@@ -24,7 +24,7 @@ public:
     virtual ~icontext() {}
 
     virtual std::auto_ptr< openclam::iprogram > create( const std::string& sources ) const = 0;
-    virtual void execute( void* data, size_t size, openclam::kernel_proxy& k ) const = 0;
+    virtual void execute( void* data, size_t size, const openclam::ikernel_proxy& k ) const = 0;
 };
 }
 

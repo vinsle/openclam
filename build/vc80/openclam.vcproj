@@ -173,15 +173,15 @@
 				RelativePath="..\..\src\libraries\openclam\kernel.hpp"
 				>
 			</File>
-			<File
-				RelativePath="..\..\src\libraries\openclam\kernel_proxy.hpp"
-				>
-			</File>
 			<Filter
 				Name="interface"
 				>
 				<File
 					RelativePath="..\..\src\libraries\openclam\icontext.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\libraries\openclam\ikernel_proxy.hpp"
 					>
 				</File>
 				<File
@@ -198,6 +198,10 @@
 				>
 				<File
 					RelativePath="..\..\src\libraries\openclam\context.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\libraries\openclam\kernel_proxy.hpp"
 					>
 				</File>
 				<File

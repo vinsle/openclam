@@ -12,6 +12,7 @@
 #include "error.hpp"
 #include "iprogram.hpp"
 #include "iopencl.hpp"
+#include "kernel_proxy.hpp"
 
 namespace openclam
 {
@@ -30,11 +31,11 @@ public:
         wrapper_.clReleaseProgram( program_ ); // $$$$ 28-02-2010 SILVIN: check error code?
     }
 
-    virtual std::auto_ptr< openclam::kernel_proxy > create( const std::string& name ) const
+    virtual std::auto_ptr< openclam::ikernel_proxy > create( const std::string& name ) const
     {       
         cl_kernel result;
         ERROR_HANDLER( result = wrapper_.clCreateKernel( program_, name.c_str(), &ERROR ) );
-        return std::auto_ptr< openclam::kernel_proxy >( new openclam::kernel_proxy( wrapper_, result ) );
+        return std::auto_ptr< openclam::ikernel_proxy >( new openclam::kernel_proxy( wrapper_, result ) );
     }
 private:
     const openclam::iopencl& wrapper_;

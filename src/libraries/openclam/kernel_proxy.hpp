@@ -9,13 +9,13 @@
 #ifndef OPENCLAM_KERNEL_PROXY_HPP_INCLUDED
 #define OPENCLAM_KERNEL_PROXY_HPP_INCLUDED
 
+#include "ikernel_proxy.hpp"
 #include "iopencl.hpp"
-#include <boost/noncopyable.hpp>
 
 namespace openclam
 {
 
-class kernel_proxy : private boost::noncopyable
+class kernel_proxy : public openclam::ikernel_proxy
 {
 public:
     kernel_proxy( const openclam::iopencl& wrapper, cl_kernel k )
@@ -29,7 +29,7 @@ public:
         wrapper_.clReleaseKernel( kernel_ ); // $$$$ 28-02-2010 SILVIN: check error code?
     }
 
-    void execute( void* data, size_t size, cl_context context, cl_command_queue queue ) const
+    virtual void execute( void* data, size_t size, cl_context context, cl_command_queue queue ) const
     {
         cl_mem arg;
         ERROR_HANDLER( arg = wrapper_.clCreateBuffer( context, CL_MEM_READ_WRITE, size, NULL, &ERROR ) );
