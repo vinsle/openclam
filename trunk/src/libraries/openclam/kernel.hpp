@@ -43,7 +43,7 @@ protected:
 private:
     const openclam::icontext& context_;
     std::auto_ptr< openclam::iprogram > program_;
-    std::auto_ptr< openclam::kernel_proxy > kernel_;
+    std::auto_ptr< openclam::ikernel_proxy > kernel_;
 };
 }
 
