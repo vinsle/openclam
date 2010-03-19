@@ -12,9 +12,6 @@
 #include "error.hpp"
 #include "iprogram.hpp"
 #include "iopencl.hpp"
-#include "kernel_proxy.hpp"
-#include <memory>
-#include <string>
 
 namespace openclam
 {

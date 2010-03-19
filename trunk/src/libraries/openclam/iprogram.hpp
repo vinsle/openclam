@@ -9,8 +9,6 @@
 #ifndef OPENCLAM_IPROGRAM_HPP_INCLUDED
 #define OPENCLAM_IPROGRAM_HPP_INCLUDED
 
-#include "error.hpp"
-#include "iopencl.hpp"
 #include "kernel_proxy.hpp"
 #include <memory>
 #include <string>
