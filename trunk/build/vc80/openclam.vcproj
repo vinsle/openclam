@@ -162,27 +162,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\libraries\openclam\context.hpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\libraries\openclam\error.hpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\src\libraries\openclam\for_each.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\libraries\openclam\icontext.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\libraries\openclam\iopencl.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\libraries\openclam\iprogram.hpp"
 				>
 			</File>
 			<File
@@ -193,14 +177,38 @@
 				RelativePath="..\..\src\libraries\openclam\kernel_proxy.hpp"
 				>
 			</File>
-			<File
-				RelativePath="..\..\src\libraries\openclam\opencl.hpp"
+			<Filter
+				Name="interface"
 				>
-			</File>
-			<File
-				RelativePath="..\..\src\libraries\openclam\program.hpp"
+				<File
+					RelativePath="..\..\src\libraries\openclam\icontext.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\libraries\openclam\iopencl.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\libraries\openclam\iprogram.hpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="implementation"
 				>
-			</File>
+				<File
+					RelativePath="..\..\src\libraries\openclam\context.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\libraries\openclam\opencl.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\libraries\openclam\program.hpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
