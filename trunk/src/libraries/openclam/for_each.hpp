@@ -9,7 +9,6 @@
 #ifndef OPENCLAM_FOR_EACH_HPP_INCLUDED
 #define OPENCLAM_FOR_EACH_HPP_INCLUDED
 
-#include "kernel.hpp"
 #include <memory>
 
 namespace openclam
