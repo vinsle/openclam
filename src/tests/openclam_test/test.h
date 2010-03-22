@@ -13,6 +13,9 @@
 #define BOOST_LIB_NAME boost_unit_test_framework
 #include <boost/config/auto_link.hpp>
 
+#include <turtle/mock.hpp>
+#pragma warning( disable : 4505 ) // unreferenced local function has been removed
+
 std::string BOOST_RESOLVE( const std::string& filename );
 
 #endif // #ifndef OPENCLAM_TEST_TEST_H_INCLUDED

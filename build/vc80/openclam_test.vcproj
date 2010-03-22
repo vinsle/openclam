@@ -212,6 +212,22 @@
 				RelativePath="..\..\src\tests\openclam_test\test.h"
 				>
 			</File>
+			<Filter
+				Name="mock"
+				>
+				<File
+					RelativePath="..\..\src\tests\openclam_test\mock_context.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\tests\openclam_test\mock_kernel_proxy.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\tests\openclam_test\mock_program.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
