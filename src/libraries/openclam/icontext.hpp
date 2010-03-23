@@ -9,7 +9,6 @@
 #ifndef OPENCLAM_ICONTEXT_HPP_INCLUDED
 #define OPENCLAM_ICONTEXT_HPP_INCLUDED
 
-#include "iprogram.hpp"
 #include "ikernel_proxy.hpp"
 #include <memory>
 #include <string>
@@ -23,7 +22,7 @@ public:
              icontext() {}
     virtual ~icontext() {}
 
-    virtual std::auto_ptr< openclam::iprogram > create( const std::string& sources ) const = 0;
+    virtual std::auto_ptr< openclam::ikernel_proxy > create( const std::string& name, const std::string& sources ) const = 0;
     virtual void execute( void* data, size_t size, const openclam::ikernel_proxy& k ) const = 0;
 };
 }

@@ -11,7 +11,6 @@
 #include "openclam/for_each.hpp"
 #include "mock_context.h"
 #include "mock_kernel_proxy.h"
-#include "mock_program.h"
 #include <vector>
 #include <list>
 #include <boost/assign.hpp>
@@ -24,9 +23,7 @@ namespace
         fixture()
         {
             openclam::mock_kernel_proxy* proxy = new openclam::mock_kernel_proxy();
-            openclam::mock_program* program = new openclam::mock_program();
-            MOCK_EXPECT( *program, create ).once().with( "Unary" ).returns( proxy );
-            MOCK_EXPECT( context, create ).once().returns( program );
+            MOCK_EXPECT( context, create ).once().with( "Unary", mock::any ).returns( proxy );
         }
         openclam::mock_context context;
     };

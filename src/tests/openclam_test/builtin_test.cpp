@@ -9,16 +9,13 @@
 #include "test.h"
 #include "openclam/kernel.hpp"
 #include "mock_context.h"
-#include "mock_program.h"
 #include "mock_kernel_proxy.h"
 
 BOOST_AUTO_TEST_CASE( get_global_id_can_be_called_inside_code_part )
 {
     openclam::mock_context context;
     openclam::mock_kernel_proxy* proxy = new openclam::mock_kernel_proxy();
-    openclam::mock_program* program = new openclam::mock_program();
-    MOCK_EXPECT( *program, create ).once().with( "MyKernel" ).returns( proxy );
-    MOCK_EXPECT( context, create ).once().returns( program );
+    MOCK_EXPECT( context, create ).once().returns( proxy );
     KERNEL( MyKernel, context, float,
         __kernel void MyKernel( global const float* a )
         {

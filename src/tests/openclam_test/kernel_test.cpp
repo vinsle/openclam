@@ -9,7 +9,6 @@
 #include "test.h"
 #include "openclam/kernel.hpp"
 #include "mock_context.h"
-#include "mock_program.h"
 #include "mock_kernel_proxy.h"
 
 //BOOST_AUTO_TEST_CASE( kernel_keyword_is_a_valid_identifier ) // $$$$ 27-02-2010 SILVIN: uncomment this test related to issue 1 (http://code.google.com/p/openclam/issues/detail?id=1)
@@ -28,9 +27,7 @@ namespace
         fixture()
         {
             openclam::mock_kernel_proxy* proxy = new openclam::mock_kernel_proxy();
-            openclam::mock_program* program = new openclam::mock_program();
-            MOCK_EXPECT( *program, create ).once().with( "MyKernel" ).returns( proxy );
-            MOCK_EXPECT( context, create ).once().returns( program );
+            MOCK_EXPECT( context, create ).once().with( "MyKernel", mock::any ).returns( proxy );
         }
         openclam::mock_context context;
     };
