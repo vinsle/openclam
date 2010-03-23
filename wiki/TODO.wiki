@@ -24,13 +24,13 @@
    * Async copies from Global to Local Memory, Local to Global Memoryn abd Prefetch
  * Better error handling
  * User can use its STL containers with openclam algorithms
-  * openclam::for_each
+  * ~~openclam::for_each~~
   * openclam::reduce
   * kernels are unary or binary functions?
  * Add profiling support
  * Add objects queries support (program, context, kernel, ...)
  * Expose kernel build log
- * Let the user to write its own Kernel without KERNEL macro (constructed with a const std::string&)
+ * Let the user to write its own Kernel without KERNEL macro (constructed with a const std::string& or binary)
  * Packaging
   * Release version 1.0
   * Add documentation (examples, API)
@@ -49,3 +49,4 @@
  * Save kernel binaries to speed up initialization time (proxy)
  * Add CUDA_KERNEL to ease CUDA -> OpenCL transition
  * Expose openclam buffer and matrix operators
+ * Add multi-gpu support
