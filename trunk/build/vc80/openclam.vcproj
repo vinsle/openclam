@@ -188,10 +188,6 @@
 					RelativePath="..\..\src\libraries\openclam\iopencl.hpp"
 					>
 				</File>
-				<File
-					RelativePath="..\..\src\libraries\openclam\iprogram.hpp"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="implementation"
@@ -206,10 +202,6 @@
 				</File>
 				<File
 					RelativePath="..\..\src\libraries\openclam\opencl.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\libraries\openclam\program.hpp"
 					>
 				</File>
 			</Filter>

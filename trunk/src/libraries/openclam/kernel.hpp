@@ -11,7 +11,6 @@
 
 #include "builtin.hpp"
 #include "icontext.hpp"
-#include "iprogram.hpp"
 #include "error.hpp"
 #include <string>
 #include <boost/function.hpp>
@@ -25,8 +24,7 @@ class kernel_base : protected openclam::builtin
 public:
     kernel_base( const std::string& name, const openclam::icontext& context, const std::string& sources )
         : context_( context )
-        , program_( context_.create( sources ) )
-        , kernel_ ( program_->create( name ) )
+        , kernel_ ( context.create( name, sources ) )
     {
         // NOTHING
     }
@@ -42,7 +40,6 @@ protected:
     boost::function< void( T* ) > f_;
 private:
     const openclam::icontext& context_;
-    std::auto_ptr< openclam::iprogram > program_;
     std::auto_ptr< openclam::ikernel_proxy > kernel_;
 };
 }

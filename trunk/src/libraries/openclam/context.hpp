@@ -12,7 +12,7 @@
 #include "error.hpp"
 #include "iopencl.hpp"
 #include "icontext.hpp"
-#include "program.hpp"
+#include "kernel_proxy.hpp"
 
 namespace openclam
 {
@@ -46,13 +46,14 @@ public:
         wrapper_.clReleaseContext( context_ ); // $$$$ 28-02-2010 SILVIN: check error code?
     }
 
-    virtual std::auto_ptr< openclam::iprogram > create( const std::string& sources ) const
+    virtual std::auto_ptr< openclam::ikernel_proxy > create( const std::string& name, const std::string& sources ) const
     {
         const unsigned int size = sources.size();
         const char* buffer = sources.c_str();
-        cl_program result;
-        ERROR_HANDLER( result = wrapper_.clCreateProgramWithSource( context_, 1, &buffer, &size, &ERROR ) );
-        return std::auto_ptr< openclam::iprogram >( new openclam::program( wrapper_, result ) );
+        cl_program program;
+        ERROR_HANDLER( program = wrapper_.clCreateProgramWithSource( context_, 1, &buffer, &size, &ERROR ) );
+        ERROR_HANDLER( ERROR = wrapper_.clBuildProgram( program, 0, NULL, NULL, NULL, NULL ) );
+        return std::auto_ptr< openclam::ikernel_proxy >( new openclam::kernel_proxy( name, wrapper_, program ) );
     }
 
     virtual void execute( void* data, size_t size, const openclam::ikernel_proxy& proxy ) const

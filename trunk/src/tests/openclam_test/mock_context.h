@@ -16,7 +16,7 @@ namespace openclam
 
 MOCK_BASE_CLASS( mock_context, icontext )
 {
-    MOCK_METHOD( create, 1 )
+    MOCK_METHOD( create, 2 )
     MOCK_METHOD( execute, 3 )
 };
 

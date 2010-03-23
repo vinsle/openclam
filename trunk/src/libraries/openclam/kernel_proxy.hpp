@@ -18,15 +18,16 @@ namespace openclam
 class kernel_proxy : public openclam::ikernel_proxy
 {
 public:
-    kernel_proxy( const openclam::iopencl& wrapper, cl_kernel k )
+    kernel_proxy( const std::string& name, const openclam::iopencl& wrapper, cl_program program )
        : wrapper_( wrapper )
-       , kernel_ ( k )
+       , program_( program )
     {
-        // NOTHING
+        ERROR_HANDLER( kernel_ = wrapper_.clCreateKernel( program_, name.c_str(), &ERROR ) );
     }
     virtual ~kernel_proxy()
     {
         wrapper_.clReleaseKernel( kernel_ ); // $$$$ 28-02-2010 SILVIN: check error code?
+        wrapper_.clReleaseProgram( program_ ); // $$$$ 28-02-2010 SILVIN: check error code?
     }
 
     virtual void execute( void* data, size_t size, cl_context context, cl_command_queue queue ) const
@@ -42,6 +43,7 @@ public:
 
 private:
     const openclam::iopencl& wrapper_;
+    cl_program program_;
     cl_kernel kernel_;
 };
 }
