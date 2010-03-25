@@ -22,14 +22,14 @@ class context : public openclam::icontext
 public:
     enum device_type
     {
-        default     = CL_DEVICE_TYPE_DEFAULT,
+        default_    = CL_DEVICE_TYPE_DEFAULT,
         cpu         = CL_DEVICE_TYPE_CPU,
         gpu         = CL_DEVICE_TYPE_GPU,
         accelerator = CL_DEVICE_TYPE_ACCELERATOR,
         all         = CL_DEVICE_TYPE_ALL
     };
 
-    context( const openclam::iopencl& wrapper, device_type type = default )
+    context( const openclam::iopencl& wrapper, device_type type = default_ )
         : wrapper_( wrapper )
     {
         ERROR_HANDLER( context_ = wrapper_.clCreateContextFromType( 0, type, NULL, NULL, &ERROR ) );
