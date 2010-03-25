@@ -19,9 +19,9 @@ BOOST_AUTO_TEST_CASE( context_throws_error_depending_on_available_device_type )
 {
     openclam::opencl wrapper;
     BOOST_CHECK_NO_THROW( openclam::context context( wrapper ) );
-    BOOST_CHECK_NO_THROW( openclam::context context( wrapper, openclam::context::default_ ) );
-    BOOST_CHECK_NO_THROW( openclam::context context( wrapper, openclam::context::all ) );
-    BOOST_CHECK_NO_THROW( openclam::context context( wrapper, openclam::context::gpu ) );
-    BOOST_CHECK_THROW( openclam::context context( wrapper, openclam::context::cpu ), std::runtime_error );
-    BOOST_CHECK_THROW( openclam::context context( wrapper, openclam::context::accelerator ), std::runtime_error );
+    BOOST_CHECK_NO_THROW( openclam::context context( wrapper, openclam::icontext::default_ ) );
+    BOOST_CHECK_NO_THROW( openclam::context context( wrapper, openclam::icontext::all ) );
+    BOOST_CHECK_NO_THROW( openclam::context context( wrapper, openclam::icontext::gpu ) );
+    BOOST_CHECK_THROW( openclam::context context( wrapper, openclam::icontext::cpu ), std::runtime_error );
+    BOOST_CHECK_THROW( openclam::context context( wrapper, openclam::icontext::accelerator ), std::runtime_error );
 }

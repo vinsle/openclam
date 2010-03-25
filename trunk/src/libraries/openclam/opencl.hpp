@@ -10,6 +10,7 @@
 #define OPENCLAM_OPENCL_HPP_INCLUDED
 
 #include "iopencl.hpp"
+#include "error.hpp"
 
 namespace openclam
 {
@@ -20,13 +21,11 @@ public:
              opencl() {}
     virtual ~opencl() {}
 
-    virtual cl_context clCreateContextFromType( const cl_context_properties*  properties,
-                                                cl_device_type device_type,
-                                                void ( *pfn_notify )( const char*, const void*, size_t, void * ),
-                                                void* user_data,
-                                                cl_int* errcode_ret ) const
+    virtual cl_context createContext( icontext::device_type type ) const
     {
-        return ::clCreateContextFromType( properties, device_type, pfn_notify, user_data, errcode_ret );
+        cl_context result;
+        ERROR_HANDLER( result = ::clCreateContextFromType( 0, type, NULL, NULL, &ERROR ) );
+        return result;
     }
 
     virtual cl_int clGetContextInfo( cl_context context,
