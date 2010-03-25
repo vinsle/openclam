@@ -20,19 +20,10 @@ namespace openclam
 class context : public openclam::icontext
 {
 public:
-    enum device_type
-    {
-        default_    = CL_DEVICE_TYPE_DEFAULT,
-        cpu         = CL_DEVICE_TYPE_CPU,
-        gpu         = CL_DEVICE_TYPE_GPU,
-        accelerator = CL_DEVICE_TYPE_ACCELERATOR,
-        all         = CL_DEVICE_TYPE_ALL
-    };
-
-    context( const openclam::iopencl& wrapper, device_type type = default_ )
+    context( const openclam::iopencl& wrapper, icontext::device_type type = default_ )
         : wrapper_( wrapper )
     {
-        ERROR_HANDLER( context_ = wrapper_.clCreateContextFromType( 0, type, NULL, NULL, &ERROR ) );
+        context_ = wrapper_.createContext( type );
         unsigned int size;
         ERROR_HANDLER( ERROR = wrapper_.clGetContextInfo( context_, CL_CONTEXT_DEVICES, 0, NULL, &size ) );
         ERROR_HANDLER( ERROR = size > 0 ? CL_SUCCESS : CL_DEVICE_NOT_AVAILABLE );

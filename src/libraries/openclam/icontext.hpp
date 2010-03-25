@@ -19,6 +19,15 @@ namespace openclam
 class icontext : private boost::noncopyable
 {
 public:
+    enum device_type
+    {
+        default_    = CL_DEVICE_TYPE_DEFAULT,
+        cpu         = CL_DEVICE_TYPE_CPU,
+        gpu         = CL_DEVICE_TYPE_GPU,
+        accelerator = CL_DEVICE_TYPE_ACCELERATOR,
+        all         = CL_DEVICE_TYPE_ALL
+    };
+
              icontext() {}
     virtual ~icontext() {}
 

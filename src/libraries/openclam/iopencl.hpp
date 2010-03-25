@@ -9,6 +9,7 @@
 #ifndef OPENCLAM_IOPENCL_HPP_INCLUDED
 #define OPENCLAM_IOPENCL_HPP_INCLUDED
 
+#include "icontext.hpp"
 #include <CL/cl.h>
 #include <boost/noncopyable.hpp>
 
@@ -21,11 +22,7 @@ public:
              iopencl() {}
     virtual ~iopencl() {}
 
-    virtual cl_context clCreateContextFromType( const cl_context_properties* properties,
-                                                cl_device_type device_type,
-                                                void ( *pfn_notify )( const char*, const void*, size_t, void* ),
-                                                void* user_data,
-                                                cl_int* errcode_ret ) const = 0;
+    virtual cl_context createContext( icontext::device_type type ) const = 0;
 
     virtual cl_int clGetContextInfo( cl_context context,
                                      cl_context_info param_name,
