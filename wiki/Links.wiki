@@ -19,6 +19,7 @@
  * NVIDIA
   * [http://developer.nvidia.com/object/opencl-download.html drivers + sdk + cuda v2.1]
   * [http://developer.nvidia.com/object/cuda_3_0_downloads.html drivers + sdk + cuda v3.0]
+  * [http://www.nvidia.com/content/cudazone/CUDABrowser/downloads/papers/NVIDIA_OpenCL_BestPracticesGuide.pdf Best Practices Guide]
 
 = Other libraries =
  * [http://code.google.com/p/thrust/ Thrust]
