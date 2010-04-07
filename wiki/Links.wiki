@@ -23,3 +23,4 @@
 
 = Other libraries =
  * [http://code.google.com/p/thrust/ Thrust]
+ * [http://labs.trolltech.com/blogs/2010/04/07/using-opencl-with-qt/ QtOpenCL]
